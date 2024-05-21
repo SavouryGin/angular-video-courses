@@ -1,1 +1,18 @@
-<section class="page">courses-page works!</section>
+<div class="courses-page">
+  <app-course-tile
+    *ngFor="
+      let course of courses;
+      trackBy: trackByCourseId;
+      let first = first;
+      let last = last;
+      let odd = odd;
+      let even = even
+    "
+    [course]="course"
+    (deleteCourse)="onCourseDelete($event)"
+    [class.first]="first"
+    [class.last]="last"
+    [class.odd]="odd"
+    [class.even]="even"
+  ></app-course-tile>
+</div>

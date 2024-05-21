@@ -9,6 +9,7 @@ import { ButtonComponent } from './components/button/button.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
+import { CourseTileComponent } from './components/course-tile/course-tile.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -23,6 +24,8 @@ describe('AppComponent', () => {
         ButtonComponent,
         BreadcrumbsComponent,
         ToolbarComponent,
+        CoursesPageComponent,
+        CourseTileComponent,
       ],
     }).compileComponents();
   });

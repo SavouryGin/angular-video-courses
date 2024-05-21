@@ -1,0 +1,18 @@
+<div class="course-tile">
+  <h2>{{ course.title }}</h2>
+  <p><strong>Duration:</strong> {{ formatDuration(course.duration) }}</p>
+  <p><strong>Creation Date:</strong> {{ formatDate(course.creationDate) }}</p>
+  <p *ngIf="course.description">
+    <strong>Description:</strong> {{ course.description }}
+  </p>
+  <app-button
+    text="Edit Course"
+    (onClick)="handleEdit()"
+    class="course-tile_button"
+  ></app-button>
+  <app-button
+    text="Delete Course"
+    (onClick)="handleDelete()"
+    class="course-tile_button"
+  ></app-button>
+</div>

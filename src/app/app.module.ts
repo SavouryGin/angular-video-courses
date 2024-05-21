@@ -11,6 +11,7 @@ import { ButtonComponent } from './components/button/button.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
+import { CourseTileComponent } from './components/course-tile/course-tile.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { FormsModule } from '@angular/forms';
     ButtonComponent,
     BreadcrumbsComponent,
     ToolbarComponent,
+    CourseTileComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
