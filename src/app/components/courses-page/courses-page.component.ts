@@ -43,4 +43,8 @@ export class CoursesPageComponent implements OnInit {
   trackByCourseId(index: number, course: Course): string {
     return course.id;
   }
+
+  handleLoadMore() {
+    console.log('Load More button clicked');
+  }
 }
