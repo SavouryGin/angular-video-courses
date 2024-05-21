@@ -5,6 +5,7 @@
       placeholder="Search courses"
       [(ngModel)]="searchQuery"
       class="toolbar_input"
+      (keydown.enter)="handleSearch()"
     />
     <app-button
       text="Search"

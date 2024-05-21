@@ -4,6 +4,8 @@ import { CoursesPageComponent } from './courses-page.component';
 import { CourseTileComponent } from '../course-tile/course-tile.component';
 import { COURSES_LIST } from '../../../__mocks__/course-list';
 import { ButtonComponent } from '../button/button.component';
+import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { FormsModule } from '@angular/forms';
 
 describe('CoursesPageComponent', () => {
   let component: CoursesPageComponent;
@@ -11,10 +13,12 @@ describe('CoursesPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [FormsModule],
       declarations: [
         CoursesPageComponent,
         CourseTileComponent,
         ButtonComponent,
+        ToolbarComponent,
       ],
     }).compileComponents();
 

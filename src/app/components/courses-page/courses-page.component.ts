@@ -9,6 +9,7 @@ import { Course } from '../../models/course';
 })
 export class CoursesPageComponent implements OnInit {
   courses: Course[] = [];
+  filteredCourses: Course[] = [];
 
   constructor() {
     console.log('CoursesPageComponent constructor');
@@ -21,11 +22,22 @@ export class CoursesPageComponent implements OnInit {
   ngOnInit() {
     console.log('CoursesPageComponent ngOnInit');
     this.courses = COURSES_LIST;
+    this.filteredCourses = this.courses;
+  }
+
+  onSearch(query: string) {
+    console.log('Search query:', query);
+    this.filteredCourses = this.courses.filter((course) =>
+      course.title.toLowerCase().includes(query.toLowerCase())
+    );
   }
 
   onCourseDelete(courseId: string) {
     console.log(`Course deleted: ${courseId}`);
     this.courses = this.courses.filter((course) => course.id !== courseId);
+    this.filteredCourses = this.filteredCourses.filter(
+      (course) => course.id !== courseId
+    );
   }
 
   trackByCourseId(index: number, course: Course): string {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-toolbar',
@@ -8,9 +8,11 @@ import { Component } from '@angular/core';
 export class ToolbarComponent {
   searchQuery: string = '';
 
+  @Output() search = new EventEmitter<string>();
+
   handleSearch() {
     console.log('Search button clicked', this.searchQuery);
-    // Placeholder for search logic
+    this.search.emit(this.searchQuery);
   }
 
   handleAddCourse() {

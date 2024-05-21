@@ -1,7 +1,8 @@
 <div class="courses-page">
+  <app-toolbar (search)="onSearch($event)"></app-toolbar>
   <app-course-tile
     *ngFor="
-      let course of courses;
+      let course of filteredCourses;
       trackBy: trackByCourseId;
       let first = first;
       let last = last;
