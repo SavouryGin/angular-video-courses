@@ -7,6 +7,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LogoComponent } from './components/logo/logo.component';
 import { CoursesPageComponent } from './components/courses-page/courses-page.component';
+import { ButtonComponent } from './components/button/button.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { CoursesPageComponent } from './components/courses-page/courses-page.com
     FooterComponent,
     LogoComponent,
     CoursesPageComponent,
+    ButtonComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],

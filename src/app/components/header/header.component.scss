@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  background-color: darkslategrey;
+  padding: 1rem 4rem;
+
+  &_logo {
+    text-transform: uppercase;
+  }
+
+  &_user-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &_button {
+    ::ng-deep {
+      .button {
+        background: transparent;
+        border: none;
+        color: white;
+      }
+
+      .button:hover {
+        background-color: darkcyan;
+      }
+    }
+  }
+}

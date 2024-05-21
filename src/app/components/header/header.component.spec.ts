@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { By } from '@angular/platform-browser';
 import { HeaderComponent } from './header.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ButtonComponent } from '../button/button.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -8,10 +10,10 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HeaderComponent]
-    })
-    .compileComponents();
-    
+      declarations: [HeaderComponent, ButtonComponent],
+      schemas: [NO_ERRORS_SCHEMA], // Use NO_ERRORS_SCHEMA to ignore unknown elements
+    }).compileComponents();
+
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -19,5 +21,12 @@ describe('HeaderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should contain "Video Course" logo', () => {
+    const logoElement = fixture.debugElement.query(
+      By.css('.header_logo')
+    ).nativeElement;
+    expect(logoElement.textContent).toContain('Video Course');
   });
 });

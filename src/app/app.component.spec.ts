@@ -5,6 +5,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LogoComponent } from './components/logo/logo.component';
 import { CoursesPageComponent } from './components/courses-page/courses-page.component';
+import { ButtonComponent } from './components/button/button.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -16,6 +17,7 @@ describe('AppComponent', () => {
         FooterComponent,
         LogoComponent,
         CoursesPageComponent,
+        ButtonComponent,
       ],
     }).compileComponents();
   });
@@ -37,7 +39,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('header')?.textContent).toContain(
-      'header works!'
+      'Video Course'
     );
   });
 });
