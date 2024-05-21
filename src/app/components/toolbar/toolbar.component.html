@@ -1,0 +1,20 @@
+<div class="toolbar">
+  <div class="toolbar_search">
+    <input
+      type="text"
+      placeholder="Search courses"
+      [(ngModel)]="searchQuery"
+      class="toolbar_input"
+    />
+    <app-button
+      text="Search"
+      (onClick)="handleSearch()"
+      class="toolbar_search-button"
+    ></app-button>
+  </div>
+  <app-button
+    text="Add Course"
+    (onClick)="handleAddCourse()"
+    class="toolbar_add-button"
+  ></app-button>
+</div>
