@@ -7,12 +7,10 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
   handleLogin() {
-    // Placeholder for login logic
     console.log('Login button clicked');
   }
 
   handleLogOut() {
-    // Placeholder for log off logic
     console.log('Log out button clicked');
   }
 }

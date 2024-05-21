@@ -20,13 +20,11 @@ export class CoursesPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('CoursesPageComponent ngOnInit');
     this.courses = COURSES_LIST;
     this.filteredCourses = this.courses;
   }
 
   onSearch(query: string) {
-    console.log('Search query:', query);
     this.filteredCourses = this.courses.filter((course) =>
       course.title.toLowerCase().includes(query.toLowerCase())
     );

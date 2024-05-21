@@ -17,6 +17,5 @@ export class ToolbarComponent {
 
   handleAddCourse() {
     console.log('Add Course button clicked');
-    // Placeholder for add course logic
   }
 }
