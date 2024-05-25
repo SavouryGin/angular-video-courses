@@ -1,0 +1,30 @@
+.course-tile {
+  background-color: white;
+  padding: 1rem;
+  border: 1px solid grey;
+
+  &_header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &_info,
+  &_buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &_body {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &_button {
+    ::ng-deep {
+      .button {
+        background-color: blue;
+        color: white;
+      }
+    }
+  }
+}

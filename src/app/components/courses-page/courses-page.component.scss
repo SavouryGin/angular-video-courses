@@ -1,0 +1,17 @@
+.courses-page {
+  background-color: whitesmoke;
+  height: 100%;
+  padding: 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &_load-more {
+    ::ng-deep {
+      .button {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+}

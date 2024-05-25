@@ -1,0 +1,28 @@
+<div class="course-tile">
+  <div class="course-tile_header">
+    <h2>{{ course.title }}</h2>
+    <div class="course-tile_info">
+      <p><strong>Duration:</strong> {{ formatDuration(course.duration) }}</p>
+      <p>
+        <strong>Creation Date:</strong> {{ formatDate(course.creationDate) }}
+      </p>
+    </div>
+  </div>
+  <div class="course-tile_body">
+    <p *ngIf="course.description">
+      {{ course.description }}
+    </p>
+    <div class="course-tile_buttons">
+      <app-button
+        text="Edit Course"
+        (onClick)="handleEdit()"
+        class="course-tile_button"
+      ></app-button>
+      <app-button
+        text="Delete Course"
+        (onClick)="handleDelete()"
+        class="course-tile_button"
+      ></app-button>
+    </div>
+  </div>
+</div>
