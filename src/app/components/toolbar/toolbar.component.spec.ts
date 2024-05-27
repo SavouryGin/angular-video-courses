@@ -22,4 +22,64 @@ describe('ToolbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should call console.log with the entered value when the Search button is clicked', () => {
+    const inputElement = fixture.debugElement.query(
+      By.css('input')
+    ).nativeElement;
+    const searchButtonDebugElement = fixture.debugElement.query(
+      By.css('.toolbar_search-button')
+    );
+    const searchButtonNativeElement =
+      searchButtonDebugElement.nativeElement.querySelector('button');
+    const testValue = 'Angular';
+
+    spyOn(console, 'log');
+    inputElement.value = testValue;
+    inputElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    searchButtonNativeElement.click();
+    fixture.detectChanges();
+
+    expect(console.log).toHaveBeenCalledWith(
+      'Search button clicked',
+      testValue
+    );
+  });
+
+  it('should call console.log with the entered value when Enter key is pressed', () => {
+    const inputElement = fixture.debugElement.query(
+      By.css('input')
+    ).nativeElement;
+    const testValue = 'React';
+
+    spyOn(console, 'log');
+    inputElement.value = testValue;
+    inputElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    fixture.detectChanges();
+
+    expect(console.log).toHaveBeenCalledWith(
+      'Search button clicked',
+      testValue
+    );
+  });
+
+  it('should call console.log when the Add Course button is clicked', () => {
+    const addButtonDebugElement = fixture.debugElement.query(
+      By.css('.toolbar_add-button')
+    );
+    const addButtonNativeElement =
+      addButtonDebugElement.nativeElement.querySelector('button');
+
+    spyOn(console, 'log');
+
+    addButtonNativeElement.click();
+    fixture.detectChanges();
+
+    expect(console.log).toHaveBeenCalledWith('Add Course button clicked');
+  });
 });
