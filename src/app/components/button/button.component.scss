@@ -3,4 +3,11 @@
   font-size: 16px;
   cursor: pointer;
   border: none;
+  border-radius: 6px;
+
+  &:hover,
+  &:active {
+    filter: brightness(120%);
+    box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+  }
 }
