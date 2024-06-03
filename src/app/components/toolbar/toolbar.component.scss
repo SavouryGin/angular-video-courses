@@ -10,10 +10,16 @@
     gap: 1rem;
   }
 
+  &_input {
+    border-radius: 6px;
+    text-indent: 0.25rem;
+    border: 1px solid lightgray;
+  }
+
   &_search-button {
     ::ng-deep {
       .button {
-        background-color: green;
+        background-color: limegreen;
         color: white;
       }
     }
@@ -22,7 +28,7 @@
   &_add-button {
     ::ng-deep {
       .button {
-        background-color: blue;
+        background-color: dodgerblue;
         color: white;
       }
     }
