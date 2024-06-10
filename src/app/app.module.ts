@@ -12,6 +12,7 @@ import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.compo
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
 import { CourseTileComponent } from './components/course-tile/course-tile.component';
+import { CourseBorderDirective } from './directives/course-border/course-border.directive';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CourseTileComponent } from './components/course-tile/course-tile.compon
     BreadcrumbsComponent,
     ToolbarComponent,
     CourseTileComponent,
+    CourseBorderDirective,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],

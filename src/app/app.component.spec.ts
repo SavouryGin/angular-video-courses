@@ -10,6 +10,7 @@ import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.compo
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
 import { CourseTileComponent } from './components/course-tile/course-tile.component';
+import { CourseBorderDirective } from './directives/course-border/course-border.directive';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -26,6 +27,7 @@ describe('AppComponent', () => {
         ToolbarComponent,
         CoursesPageComponent,
         CourseTileComponent,
+        CourseBorderDirective,
       ],
     }).compileComponents();
   });

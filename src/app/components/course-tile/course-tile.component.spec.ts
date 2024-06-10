@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ButtonComponent } from '../button/button.component';
 import { CourseTileComponent } from './course-tile.component';
+import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
 
 describe('CourseTileComponent', () => {
   let component: CourseTileComponent;
@@ -9,7 +10,11 @@ describe('CourseTileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CourseTileComponent, ButtonComponent],
+      declarations: [
+        CourseTileComponent,
+        ButtonComponent,
+        CourseBorderDirective,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CourseTileComponent);

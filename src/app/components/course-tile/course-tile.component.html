@@ -1,4 +1,10 @@
-<div class="course-tile">
+<div
+  class="course-tile"
+  appCourseBorder
+  [creationDate]="course.creationDate"
+  [freshBorderColor]="'lightgreen'"
+  [upcomingBorderColor]="'cyan'"
+>
   <div class="course-tile_header">
     <h2>{{ course.title }}</h2>
     <div class="course-tile_info">

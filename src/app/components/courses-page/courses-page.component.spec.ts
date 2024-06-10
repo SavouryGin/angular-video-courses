@@ -6,6 +6,7 @@ import { COURSES_LIST } from '../../../__mocks__/course-list';
 import { ButtonComponent } from '../button/button.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
+import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
 
 describe('CoursesPageComponent', () => {
   let component: CoursesPageComponent;
@@ -19,6 +20,7 @@ describe('CoursesPageComponent', () => {
         CourseTileComponent,
         ButtonComponent,
         ToolbarComponent,
+        CourseBorderDirective,
       ],
     }).compileComponents();
 
