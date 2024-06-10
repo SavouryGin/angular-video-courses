@@ -54,10 +54,23 @@ describe('CourseTileComponent', () => {
     expect(durationElement.textContent).toContain('1h 15min');
   });
 
-  it('should display formatted creation date', () => {
-    const dateElement = fixture.debugElement.queryAll(By.css('p'))[1]
-      .nativeElement;
-    expect(dateElement.textContent).toContain('01/01/2023');
+  it('should display the formatted creation date using the built-in date pipe', () => {
+    const mockCourse = {
+      id: '1',
+      title: 'Angular Course',
+      creationDate: new Date('2023-12-11'),
+      duration: 120,
+      description: 'Learn Angular',
+      topRated: true,
+    };
+
+    component.course = mockCourse;
+    fixture.detectChanges();
+
+    const dateElement = fixture.debugElement.query(
+      By.css('.course-tile_info p:nth-child(2)')
+    ).nativeElement;
+    expect(dateElement.textContent).toContain('12/11/2023');
   });
 
   it('should display course description', () => {

@@ -26,7 +26,8 @@
     <div class="course-tile_info">
       <p><strong>Duration:</strong> {{ course.duration | duration }}</p>
       <p>
-        <strong>Creation Date:</strong> {{ formatDate(course.creationDate) }}
+        <strong>Creation Date:</strong>
+        {{ course.creationDate | date : "MM/dd/yyyy" }}
       </p>
     </div>
   </div>
