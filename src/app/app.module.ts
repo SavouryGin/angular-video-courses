@@ -13,6 +13,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
 import { CourseTileComponent } from './components/course-tile/course-tile.component';
 import { CourseBorderDirective } from './directives/course-border/course-border.directive';
+import { DurationPipe } from './pipes/duration-pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { CourseBorderDirective } from './directives/course-border/course-border.
     ToolbarComponent,
     CourseTileComponent,
     CourseBorderDirective,
+    DurationPipe,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],

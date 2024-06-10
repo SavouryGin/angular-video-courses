@@ -7,6 +7,7 @@ import { ButtonComponent } from '../button/button.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
 import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
+import { DurationPipe } from '../../pipes/duration-pipe';
 
 describe('CoursesPageComponent', () => {
   let component: CoursesPageComponent;
@@ -21,6 +22,7 @@ describe('CoursesPageComponent', () => {
         ButtonComponent,
         ToolbarComponent,
         CourseBorderDirective,
+        DurationPipe,
       ],
     }).compileComponents();
 

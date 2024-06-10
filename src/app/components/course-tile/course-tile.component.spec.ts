@@ -3,6 +3,7 @@ import { By } from '@angular/platform-browser';
 import { ButtonComponent } from '../button/button.component';
 import { CourseTileComponent } from './course-tile.component';
 import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
+import { DurationPipe } from '../../pipes/duration-pipe';
 
 describe('CourseTileComponent', () => {
   let component: CourseTileComponent;
@@ -14,6 +15,7 @@ describe('CourseTileComponent', () => {
         CourseTileComponent,
         ButtonComponent,
         CourseBorderDirective,
+        DurationPipe,
       ],
     }).compileComponents();
 
@@ -33,11 +35,23 @@ describe('CourseTileComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display formatted duration', () => {
+  it('should display the formatted duration using the duration pipe', () => {
+    const mockCourse = {
+      id: '1',
+      title: 'Angular Course',
+      creationDate: new Date(),
+      duration: 75,
+      description: 'Learn Angular',
+      topRated: true,
+    };
+
+    component.course = mockCourse;
+    fixture.detectChanges();
+
     const durationElement = fixture.debugElement.query(
-      By.css('p')
+      By.css('.course-tile_info p')
     ).nativeElement;
-    expect(durationElement.textContent).toContain('1h 28min');
+    expect(durationElement.textContent).toContain('1h 15min');
   });
 
   it('should display formatted creation date', () => {
