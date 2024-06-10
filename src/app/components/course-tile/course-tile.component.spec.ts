@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { ButtonComponent } from '../button/button.component';
 import { CourseTileComponent } from './course-tile.component';
 import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
-import { DurationPipe } from '../../pipes/duration-pipe';
+import { DurationPipe } from '../../pipes/duration';
 
 describe('CourseTileComponent', () => {
   let component: CourseTileComponent;

@@ -7,9 +7,9 @@ import { ButtonComponent } from '../button/button.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
 import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
-import { DurationPipe } from '../../pipes/duration-pipe';
-import { Course } from '../../models/course';
-import { OrderByPipe } from '../../pipes/order-by-pipe';
+import { DurationPipe } from '../../pipes/duration';
+import { FilterPipe } from '../../pipes/filter';
+import { OrderByPipe } from '../../pipes/order-by';
 
 describe('CoursesPageComponent', () => {
   let component: CoursesPageComponent;
@@ -26,6 +26,7 @@ describe('CoursesPageComponent', () => {
         CourseBorderDirective,
         DurationPipe,
         OrderByPipe,
+        FilterPipe,
       ],
     }).compileComponents();
 

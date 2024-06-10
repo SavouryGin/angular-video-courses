@@ -13,8 +13,8 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
 import { CourseTileComponent } from './components/course-tile/course-tile.component';
 import { CourseBorderDirective } from './directives/course-border/course-border.directive';
-import { DurationPipe } from './pipes/duration-pipe';
-import { OrderByPipe } from './pipes/order-by-pipe';
+import { DurationPipe } from './pipes/duration';
+import { OrderByPipe } from './pipes/order-by';
 
 @NgModule({
   declarations: [

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { COURSES_LIST } from '../../../__mocks__/course-list';
 import { Course } from '../../models/course';
+import { FilterPipe } from '../../pipes/filter';
 
 @Component({
   selector: 'app-courses-page',
@@ -11,7 +12,7 @@ export class CoursesPageComponent implements OnInit {
   courses: Course[] = [];
   filteredCourses: Course[] = [];
 
-  constructor() {
+  constructor(private filterPipe: FilterPipe) {
     console.log('CoursesPageComponent constructor');
   }
 
@@ -25,9 +26,7 @@ export class CoursesPageComponent implements OnInit {
   }
 
   onSearch(query: string) {
-    this.filteredCourses = this.courses.filter((course) =>
-      course.title.toLowerCase().includes(query.toLowerCase())
-    );
+    this.filteredCourses = this.filterPipe.transform(this.courses, query);
   }
 
   onCourseDelete(courseId: string) {
