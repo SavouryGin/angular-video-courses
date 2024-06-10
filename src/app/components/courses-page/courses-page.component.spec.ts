@@ -50,4 +50,24 @@ describe('CoursesPageComponent', () => {
       expect(courseTileComponent.course).toEqual(COURSES_LIST[index]);
     });
   });
+
+  it('should display "No Data" message when no courses are found', () => {
+    component.filteredCourses = [];
+    fixture.detectChanges();
+    const noDataElement = fixture.debugElement.query(By.css('p'));
+    expect(noDataElement.nativeElement.textContent).toContain('No Data');
+  });
+
+  it('should filter courses based on search query', () => {
+    component.onSearch('Angular');
+    fixture.detectChanges();
+    const filteredCourseElements = fixture.debugElement.queryAll(
+      By.css('app-course-tile')
+    );
+    expect(filteredCourseElements.length).toBe(
+      COURSES_LIST.filter((course) =>
+        course.title.toLowerCase().includes('angular')
+      ).length
+    );
+  });
 });
