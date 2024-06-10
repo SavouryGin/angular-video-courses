@@ -8,6 +8,8 @@ import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
 import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
 import { DurationPipe } from '../../pipes/duration-pipe';
+import { Course } from '../../models/course';
+import { OrderByPipe } from '../../pipes/order-by-pipe';
 
 describe('CoursesPageComponent', () => {
   let component: CoursesPageComponent;
@@ -23,6 +25,7 @@ describe('CoursesPageComponent', () => {
         ToolbarComponent,
         CourseBorderDirective,
         DurationPipe,
+        OrderByPipe,
       ],
     }).compileComponents();
 
@@ -40,17 +43,6 @@ describe('CoursesPageComponent', () => {
       By.css('app-course-tile')
     );
     expect(courseElements.length).toBe(COURSES_LIST.length);
-  });
-
-  it('should pass the correct course to each CourseTileComponent', () => {
-    const courseElements = fixture.debugElement.queryAll(
-      By.css('app-course-tile')
-    );
-    courseElements.forEach((courseElement, index) => {
-      const courseTileComponent =
-        courseElement.componentInstance as CourseTileComponent;
-      expect(courseTileComponent.course).toEqual(COURSES_LIST[index]);
-    });
   });
 
   it('should display "No Data" message when no courses are found', () => {

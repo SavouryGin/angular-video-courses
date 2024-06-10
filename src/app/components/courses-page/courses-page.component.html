@@ -4,7 +4,7 @@
   <ng-container *ngIf="filteredCourses.length; else noDataTemplate">
     <app-course-tile
       *ngFor="
-        let course of filteredCourses;
+        let course of filteredCourses | orderBy : 'creationDate';
         trackBy: trackByCourseId;
         let first = first;
         let last = last;

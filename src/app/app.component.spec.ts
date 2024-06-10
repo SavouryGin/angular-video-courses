@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { CourseTileComponent } from './components/course-tile/course-tile.component';
 import { CourseBorderDirective } from './directives/course-border/course-border.directive';
 import { DurationPipe } from './pipes/duration-pipe';
+import { OrderByPipe } from './pipes/order-by-pipe';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -30,6 +31,7 @@ describe('AppComponent', () => {
         CourseTileComponent,
         CourseBorderDirective,
         DurationPipe,
+        OrderByPipe,
       ],
     }).compileComponents();
   });
