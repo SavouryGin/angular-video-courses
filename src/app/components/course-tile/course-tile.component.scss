@@ -7,6 +7,12 @@
   &_header {
     display: flex;
     justify-content: space-between;
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
   }
 
   &_info,
@@ -32,5 +38,9 @@
         width: 5rem;
       }
     }
+  }
+
+  &_top-rated {
+    background-color: #fffbddbe;
   }
 }

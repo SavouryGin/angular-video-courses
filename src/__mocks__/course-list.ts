@@ -7,6 +7,7 @@ export const COURSES_LIST: Course[] = [
     creationDate: new Date('2024-06-09'),
     duration: 210,
     description: 'An introduction to Angular framework',
+    topRated: true,
   },
   {
     id: '35dac635-deee-437f-b6bc-9a883db155f0',
@@ -21,6 +22,7 @@ export const COURSES_LIST: Course[] = [
     creationDate: new Date('2023-12-11'),
     duration: 348,
     description: 'An introduction to Node.js',
+    topRated: true,
   },
   {
     id: '803d4c40-c1f9-4eae-9ae4-3e18640d33d7',

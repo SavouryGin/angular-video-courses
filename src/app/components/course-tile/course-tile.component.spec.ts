@@ -56,4 +56,38 @@ describe('CourseTileComponent', () => {
       .nativeElement;
     expect(descriptionElement.textContent).toContain('Test description');
   });
+
+  it('should display the star icon for top-rated courses', () => {
+    const mockCourse = {
+      id: '1',
+      title: 'Angular Course',
+      creationDate: new Date(),
+      duration: 120,
+      description: 'Learn Angular',
+      topRated: true,
+    };
+
+    component.course = mockCourse;
+    fixture.detectChanges();
+
+    const svgElement = fixture.debugElement.query(By.css('svg'));
+    expect(svgElement).toBeTruthy();
+  });
+
+  it('should not display the star icon for non-top-rated courses', () => {
+    const mockCourse = {
+      id: '2',
+      title: 'React Course',
+      creationDate: new Date(),
+      duration: 90,
+      description: 'Learn React',
+      topRated: false,
+    };
+
+    component.course = mockCourse;
+    fixture.detectChanges();
+
+    const svgElement = fixture.debugElement.query(By.css('svg'));
+    expect(svgElement).toBeFalsy();
+  });
 });
