@@ -8,7 +8,7 @@
 >
   <div class="course-tile_header">
     <h2>
-      {{ course.title }}
+      {{ course.title | uppercase }}
       <svg
         *ngIf="course.topRated"
         width="16"

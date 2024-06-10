@@ -33,11 +33,6 @@ describe('CourseTileComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display course title', () => {
-    const titleElement = fixture.debugElement.query(By.css('h2')).nativeElement;
-    expect(titleElement.textContent).toContain('Test Course');
-  });
-
   it('should display formatted duration', () => {
     const durationElement = fixture.debugElement.query(
       By.css('p')
@@ -89,5 +84,22 @@ describe('CourseTileComponent', () => {
 
     const svgElement = fixture.debugElement.query(By.css('svg'));
     expect(svgElement).toBeFalsy();
+  });
+
+  it('should display the course title in uppercase', () => {
+    const mockCourse = {
+      id: '1',
+      title: 'Angular Course',
+      creationDate: new Date(),
+      duration: 120,
+      description: 'Learn Angular',
+      topRated: true,
+    };
+
+    component.course = mockCourse;
+    fixture.detectChanges();
+
+    const titleElement = fixture.debugElement.query(By.css('h2')).nativeElement;
+    expect(titleElement.textContent).toContain('ANGULAR COURSE');
   });
 });
