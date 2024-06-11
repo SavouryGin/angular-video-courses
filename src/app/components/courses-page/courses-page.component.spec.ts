@@ -26,8 +26,8 @@ describe('CoursesPageComponent', () => {
         CourseBorderDirective,
         DurationPipe,
         OrderByPipe,
-        FilterPipe,
       ],
+      providers: [FilterPipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CoursesPageComponent);

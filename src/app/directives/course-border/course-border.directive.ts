@@ -1,16 +1,28 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 
 @Directive({
   selector: '[appCourseBorder]',
 })
-export class CourseBorderDirective implements OnInit {
+export class CourseBorderDirective implements OnChanges {
   @Input() creationDate!: Date;
   @Input() freshBorderColor: string = 'green';
   @Input() upcomingBorderColor: string = 'blue';
 
   constructor(private el: ElementRef) {}
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['creationDate'] && this.creationDate) {
+      this.setBorder();
+    }
+  }
+
+  private setBorder() {
     const currentDate = new Date();
     const fourteenDaysAgo = new Date();
     fourteenDaysAgo.setDate(currentDate.getDate() - 14);

@@ -15,6 +15,7 @@ import { CourseTileComponent } from './components/course-tile/course-tile.compon
 import { CourseBorderDirective } from './directives/course-border/course-border.directive';
 import { DurationPipe } from './pipes/duration';
 import { OrderByPipe } from './pipes/order-by';
+import { FilterPipe } from './pipes/filter';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { OrderByPipe } from './pipes/order-by';
     OrderByPipe,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
-  providers: [],
+  providers: [FilterPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

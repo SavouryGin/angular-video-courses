@@ -13,6 +13,7 @@ import { CourseTileComponent } from './components/course-tile/course-tile.compon
 import { CourseBorderDirective } from './directives/course-border/course-border.directive';
 import { DurationPipe } from './pipes/duration';
 import { OrderByPipe } from './pipes/order-by';
+import { FilterPipe } from './pipes/filter';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -33,6 +34,7 @@ describe('AppComponent', () => {
         DurationPipe,
         OrderByPipe,
       ],
+      providers: [FilterPipe],
     }).compileComponents();
   });
 
