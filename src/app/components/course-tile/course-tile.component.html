@@ -1,10 +1,33 @@
-<div class="course-tile">
+<div
+  class="course-tile"
+  appCourseBorder
+  [creationDate]="course.creationDate"
+  [freshBorderColor]="'lightgreen'"
+  [upcomingBorderColor]="'cyan'"
+  [ngClass]="{ 'course-tile_top-rated': course.topRated }"
+>
   <div class="course-tile_header">
-    <h2>{{ course.title }}</h2>
+    <h2>
+      {{ course.title | uppercase }}
+      <svg
+        *ngIf="course.topRated"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
+          fill="gold"
+        />
+      </svg>
+    </h2>
     <div class="course-tile_info">
-      <p><strong>Duration:</strong> {{ formatDuration(course.duration) }}</p>
+      <p><strong>Duration:</strong> {{ course.duration | duration }}</p>
       <p>
-        <strong>Creation Date:</strong> {{ formatDate(course.creationDate) }}
+        <strong>Creation Date:</strong>
+        {{ course.creationDate | date : "MM/dd/yyyy" }}
       </p>
     </div>
   </div>

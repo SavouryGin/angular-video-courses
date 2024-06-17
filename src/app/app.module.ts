@@ -12,6 +12,10 @@ import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.compo
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
 import { CourseTileComponent } from './components/course-tile/course-tile.component';
+import { CourseBorderDirective } from './directives/course-border/course-border.directive';
+import { DurationPipe } from './pipes/duration';
+import { OrderByPipe } from './pipes/order-by';
+import { FilterPipe } from './pipes/filter';
 
 @NgModule({
   declarations: [
@@ -24,9 +28,12 @@ import { CourseTileComponent } from './components/course-tile/course-tile.compon
     BreadcrumbsComponent,
     ToolbarComponent,
     CourseTileComponent,
+    CourseBorderDirective,
+    DurationPipe,
+    OrderByPipe,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
-  providers: [],
+  providers: [FilterPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
