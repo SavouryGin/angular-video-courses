@@ -16,6 +16,7 @@ import { DurationPipe } from './pipes/duration';
 import { OrderByPipe } from './pipes/order-by';
 import { FilterPipe } from './pipes/filter';
 import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
+import { LoginPageComponent } from './components/login-page/login-page.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
     CourseBorderDirective,
     DurationPipe,
     OrderByPipe,
+    LoginPageComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, BreadcrumbsModule],
   providers: [FilterPipe],
