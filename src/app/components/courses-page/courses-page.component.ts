@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { COURSES_LIST } from '../../../__mocks__/course-list';
 import { Course } from '../../models/course';
 import { FilterPipe } from '../../pipes/filter';
+import { CoursesService } from '../../services/courses/courses.service';
 
 @Component({
   selector: 'app-courses-page',
@@ -12,16 +12,17 @@ export class CoursesPageComponent implements OnInit {
   courses: Course[] = [];
   filteredCourses: Course[] = [];
 
-  constructor(private filterPipe: FilterPipe) {
-    console.log('CoursesPageComponent constructor');
-  }
+  constructor(
+    private coursesService: CoursesService,
+    private filterPipe: FilterPipe
+  ) {}
 
   ngOnChanges() {
     console.log('CoursesPageComponent ngOnChanges');
   }
 
   ngOnInit() {
-    this.courses = COURSES_LIST;
+    this.courses = this.coursesService.getCourses();
     this.filteredCourses = this.courses;
   }
 
@@ -31,10 +32,9 @@ export class CoursesPageComponent implements OnInit {
 
   onCourseDelete(courseId: string) {
     console.log(`Course deleted: ${courseId}`);
-    this.courses = this.courses.filter((course) => course.id !== courseId);
-    this.filteredCourses = this.filteredCourses.filter(
-      (course) => course.id !== courseId
-    );
+    this.coursesService.removeCourse(courseId);
+    this.courses = this.coursesService.getCourses();
+    this.filteredCourses = this.filterPipe.transform(this.courses, '');
   }
 
   trackByCourseId(index: number, course: Course): string {

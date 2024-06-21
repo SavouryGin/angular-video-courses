@@ -14,6 +14,7 @@ import { DurationPipe } from './pipes/duration';
 import { OrderByPipe } from './pipes/order-by';
 import { FilterPipe } from './pipes/filter';
 import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
+import { CoursesService } from './services/courses/courses.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -33,7 +34,7 @@ describe('AppComponent', () => {
         DurationPipe,
         OrderByPipe,
       ],
-      providers: [FilterPipe],
+      providers: [FilterPipe, CoursesService],
     }).compileComponents();
   });
 
