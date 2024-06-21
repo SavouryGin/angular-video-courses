@@ -1,5 +1,9 @@
-.courses-page {
+:host {
+  overflow-y: auto;
   background-color: whitesmoke;
+}
+
+.courses-page {
   height: 100%;
   padding: 1rem 4rem;
   display: flex;
@@ -13,6 +17,7 @@
         width: 100%;
         background-color: white;
         box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+        margin-bottom: 1rem;
       }
     }
   }
