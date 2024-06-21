@@ -31,10 +31,14 @@ export class CoursesPageComponent implements OnInit {
   }
 
   onCourseDelete(courseId: string) {
-    console.log(`Course deleted: ${courseId}`);
-    this.coursesService.removeCourse(courseId);
-    this.courses = this.coursesService.getCourses();
-    this.filteredCourses = this.filterPipe.transform(this.courses, '');
+    const confirmed = confirm(
+      'Do you really want to delete this course? Yes/No'
+    );
+    if (confirmed) {
+      this.coursesService.removeCourse(courseId);
+      this.courses = this.coursesService.getCourses();
+      this.filteredCourses = this.filterPipe.transform(this.courses, '');
+    }
   }
 
   trackByCourseId(index: number, course: Course): string {
