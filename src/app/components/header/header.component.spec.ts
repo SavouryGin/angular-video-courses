@@ -1,60 +1,71 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { HeaderComponent } from './header.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Router } from '@angular/router';
+import { By } from '@angular/platform-browser';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ButtonComponent } from '../button/button.component';
 import { LogoComponent } from '../logo/logo.component';
+
+class MockRouter {
+  url = '/';
+  navigate = jasmine.createSpy('navigate');
+}
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
+  let authService: AuthenticationService;
+  let router: MockRouter;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [HeaderComponent, ButtonComponent, LogoComponent],
-      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        AuthenticationService,
+        { provide: Router, useClass: MockRouter },
+      ],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
+    authService = TestBed.inject(AuthenticationService);
+    router = TestBed.inject(Router) as any;
+    localStorage.clear(); // Clear localStorage before each test
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.clear(); // Clear localStorage after each test
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call handleLogin when the "User login" button is clicked', () => {
-    const loginButtonDebugElement = fixture.debugElement.query(
-      By.css('.header_user-actions .header_button:first-child')
-    );
-    const loginButtonNativeElement =
-      loginButtonDebugElement.nativeElement.querySelector('button');
-
-    spyOn(component, 'handleLogin').and.callThrough();
-    spyOn(console, 'log');
-
-    loginButtonNativeElement.click();
+  it('should show user info if authenticated', () => {
+    authService.login('testUser', 'password');
     fixture.detectChanges();
 
-    expect(component.handleLogin).toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith('Login button clicked');
+    const userInfoElement = fixture.debugElement.query(
+      By.css('.header_user-info')
+    );
+    expect(userInfoElement).toBeTruthy();
+    expect(userInfoElement.nativeElement.textContent).toContain('testUser');
   });
 
-  it('should call handleLogOut when the "Log out" button is clicked', () => {
-    const logoutButtonDebugElement = fixture.debugElement.query(
-      By.css('.header_user-actions .header_button:last-child')
-    );
-    const logoutButtonNativeElement =
-      logoutButtonDebugElement.nativeElement.querySelector('button');
-
-    spyOn(component, 'handleLogOut').and.callThrough();
-    spyOn(console, 'log');
-
-    logoutButtonNativeElement.click();
+  it('should not show user info if not authenticated', () => {
     fixture.detectChanges();
 
-    expect(component.handleLogOut).toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith('Log out button clicked');
+    const userInfoElement = fixture.debugElement.query(
+      By.css('.header_user-info')
+    );
+    expect(userInfoElement).toBeNull();
+  });
+
+  it('should return user info correctly', () => {
+    authService.login('testUser', 'password');
+    expect(component.getUserInfo()?.username).toBe('testUser');
   });
 });

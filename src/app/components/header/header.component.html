@@ -1,14 +1,10 @@
 <header class="header">
   <app-logo></app-logo>
-  <div class="header_user-actions">
-    <app-button
-      text="User login"
-      (onClick)="handleLogin()"
-      class="header_button"
-    ></app-button>
+  <div class="header_user-actions" *ngIf="showUserInfo()">
+    <span class="header_user-info">{{ getUserInfo()?.username }}</span>
     <app-button
       text="Log out"
-      (onClick)="handleLogOut()"
+      (onClick)="handleLogout()"
       class="header_button"
     ></app-button>
   </div>

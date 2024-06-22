@@ -9,6 +9,11 @@
   &_user-actions {
     display: flex;
     gap: 1rem;
+    align-items: center;
+  }
+
+  &_user-info {
+    text-decoration: underline;
   }
 
   &_button {

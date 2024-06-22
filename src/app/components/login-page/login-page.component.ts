@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -9,9 +11,13 @@ export class LoginPageComponent {
   email: string = '';
   password: string = '';
 
+  constructor(
+    private authService: AuthenticationService,
+    private router: Router
+  ) {}
+
   handleLogin() {
-    console.log('Login button clicked');
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
+    this.authService.login(this.email, this.password);
+    this.router.navigate(['/courses']);
   }
 }
