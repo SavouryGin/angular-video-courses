@@ -7,9 +7,12 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ButtonComponent {
   @Input() text: string = '';
+  @Input() disabled: boolean = false;
   @Output() onClick = new EventEmitter<void>();
 
   handleClick() {
-    this.onClick.emit();
+    if (!this.disabled) {
+      this.onClick.emit();
+    }
   }
 }

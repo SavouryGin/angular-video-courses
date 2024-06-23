@@ -33,6 +33,7 @@
         text="Login"
         (click)="handleLogin()"
         class="login-container_button"
+        [disabled]="!email || !password"
       ></app-button>
     </div>
   </div>
