@@ -15,7 +15,6 @@ export class CourseTileComponent {
   }
 
   handleDelete() {
-    console.log(`Deleting course: ${this.course.id}`);
     this.deleteCourse.emit(this.course.id);
   }
 }

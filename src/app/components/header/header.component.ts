@@ -14,9 +14,7 @@ export class HeaderComponent {
   ) {}
 
   showUserInfo(): boolean {
-    return (
-      !this.router.url.includes('login') && this.authService.isAuthenticated()
-    );
+    return this.authService.isAuthenticated();
   }
 
   handleLogout() {
