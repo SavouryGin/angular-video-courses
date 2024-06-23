@@ -32,12 +32,12 @@ describe('HeaderComponent', () => {
     component = fixture.componentInstance;
     authService = TestBed.inject(AuthenticationService);
     router = TestBed.inject(Router) as any;
-    localStorage.clear(); // Clear localStorage before each test
+    localStorage.clear();
     fixture.detectChanges();
   });
 
   afterEach(() => {
-    localStorage.clear(); // Clear localStorage after each test
+    localStorage.clear();
   });
 
   it('should create', () => {

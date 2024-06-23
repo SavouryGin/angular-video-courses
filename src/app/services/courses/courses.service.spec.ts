@@ -1,4 +1,3 @@
-// src/app/services/courses.service.spec.ts
 import { TestBed } from '@angular/core/testing';
 import { CoursesService } from './courses.service';
 import { COURSES_LIST } from '../../../__mocks__/course-list';

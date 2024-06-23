@@ -7,11 +7,11 @@ describe('AuthenticationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(AuthenticationService);
-    localStorage.clear(); // Clear localStorage before each test
+    localStorage.clear();
   });
 
   afterEach(() => {
-    localStorage.clear(); // Clear localStorage after each test
+    localStorage.clear();
   });
 
   it('should be created', () => {
