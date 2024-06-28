@@ -17,6 +17,7 @@ import { OrderByPipe } from './pipes/order-by';
 import { FilterPipe } from './pipes/filter';
 import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { LoginPageComponent } from './components/login-page/login-page.component';
+import { TextInputComponent } from './components/text-input/text-input.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { LoginPageComponent } from './components/login-page/login-page.component
     DurationPipe,
     OrderByPipe,
     LoginPageComponent,
+    TextInputComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, BreadcrumbsModule],
   providers: [FilterPipe],
