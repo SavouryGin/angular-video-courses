@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -6,11 +8,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  handleLogin() {
-    console.log('Login button clicked');
+  constructor(
+    public router: Router,
+    private authService: AuthenticationService
+  ) {}
+
+  showUserInfo(): boolean {
+    return this.authService.isAuthenticated();
   }
 
-  handleLogOut() {
-    console.log('Log out button clicked');
+  handleLogout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+
+  getUserInfo() {
+    return this.authService.getUserInfo();
   }
 }

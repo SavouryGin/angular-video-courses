@@ -1,1 +1,8 @@
-<button (click)="handleClick()" class="button">{{ text }}</button>
+<button
+  (click)="handleClick()"
+  [disabled]="disabled"
+  class="button"
+  [ngClass]="{ 'button--disabled': disabled }"
+>
+  <span>{{ text }}</span>
+</button>

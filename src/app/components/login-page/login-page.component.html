@@ -1,0 +1,40 @@
+<div class="login-container">
+  <h2>Login</h2>
+  <div class="login-container_form">
+    <div class="login-container_field">
+      <label class="login-container_label" for="email"
+        ><span>E-mail:</span
+        ><span class="login-container_label_required">*required</span></label
+      >
+      <input
+        class="login-container_input"
+        type="email"
+        id="email"
+        [(ngModel)]="email"
+        required
+      />
+    </div>
+    <div class="login-container_field">
+      <label class="login-container_label" for="password">
+        <span>Password:</span
+        ><span class="login-container_label_required">*required</span></label
+      >
+      <input
+        class="login-container_input"
+        type="password"
+        id="password"
+        [(ngModel)]="password"
+        required
+      />
+    </div>
+    <div class="login-container_buttons">
+      <a class="login-container_link">Forgot password?</a>
+      <app-button
+        text="Login"
+        (click)="handleLogin()"
+        class="login-container_button"
+        [disabled]="!email || !password"
+      ></app-button>
+    </div>
+  </div>
+</div>
