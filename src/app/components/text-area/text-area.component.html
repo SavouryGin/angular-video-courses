@@ -1,0 +1,9 @@
+<div class="text-area">
+  <label for="{{ id }}">{{ label }}</label>
+  <textarea
+    [value]="value"
+    [name]="name"
+    [id]="id"
+    (input)="handleInputChange($event)"
+  ></textarea>
+</div>

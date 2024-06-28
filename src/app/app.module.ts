@@ -18,6 +18,7 @@ import { FilterPipe } from './pipes/filter';
 import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
+import { TextAreaComponent } from './components/text-area/text-area.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { TextInputComponent } from './components/text-input/text-input.component
     OrderByPipe,
     LoginPageComponent,
     TextInputComponent,
+    TextAreaComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, BreadcrumbsModule],
   providers: [FilterPipe],
