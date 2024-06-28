@@ -19,6 +19,7 @@ import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { TextAreaComponent } from './components/text-area/text-area.component';
+import { NumericInputComponent } from './components/numeric-input/numeric-input.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { TextAreaComponent } from './components/text-area/text-area.component';
     LoginPageComponent,
     TextInputComponent,
     TextAreaComponent,
+    NumericInputComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, BreadcrumbsModule],
   providers: [FilterPipe],
