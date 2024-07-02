@@ -20,6 +20,7 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { TextAreaComponent } from './components/text-area/text-area.component';
 import { NumericInputComponent } from './components/numeric-input/numeric-input.component';
+import { AddCourseComponent } from './components/add-course/add-course.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { NumericInputComponent } from './components/numeric-input/numeric-input.
     TextInputComponent,
     TextAreaComponent,
     NumericInputComponent,
+    AddCourseComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, BreadcrumbsModule],
   providers: [FilterPipe],

@@ -1,0 +1,50 @@
+<div class="add-course">
+  <h2>Add New Course</h2>
+  <form>
+    <app-text-input
+      label="Title"
+      [(value)]="title"
+      name="title"
+      placeholder="Enter course title"
+      id="title"
+    ></app-text-input>
+
+    <app-text-area
+      label="Description"
+      [(value)]="description"
+      name="description"
+      placeholder="Enter course description"
+      id="description"
+    ></app-text-area>
+
+    <app-text-input
+      label="Date"
+      [(value)]="date"
+      name="date"
+      placeholder="Enter course date"
+      id="date"
+    ></app-text-input>
+
+    <app-numeric-input
+      label="Duration (minutes)"
+      [(value)]="duration"
+      name="duration"
+      placeholder="0"
+      id="duration"
+      min="0"
+    ></app-numeric-input>
+
+    <div class="buttons">
+      <app-button
+        text="Cancel"
+        (onClick)="handleCancel()"
+        class="cancel-button"
+      ></app-button>
+      <app-button
+        text="Save"
+        (onClick)="handleSave()"
+        class="save-button"
+      ></app-button>
+    </div>
+  </form>
+</div>

@@ -10,6 +10,7 @@ export class TextInputComponent {
   @Input() type: string = 'text';
   @Input() value: string = '';
   @Input() name: string = '';
+  @Input() placeholder: string = '';
   @Input() id: string = '';
   @Output() valueChange: EventEmitter<string> = new EventEmitter<string>();
 

@@ -9,6 +9,7 @@ export class NumericInputComponent {
   @Input() label: string = '';
   @Input() value: number | string = '';
   @Input() name: string = '';
+  @Input() placeholder: string = '';
   @Input() id: string = '';
   @Input() min: number | string = '';
   @Input() max: number | string = '';

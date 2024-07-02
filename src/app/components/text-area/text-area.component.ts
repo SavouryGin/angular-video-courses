@@ -9,6 +9,7 @@ export class TextAreaComponent {
   @Input() label: string = '';
   @Input() value: string = '';
   @Input() name: string = '';
+  @Input() placeholder: string = '';
   @Input() id: string = '';
   @Output() valueChange: EventEmitter<string> = new EventEmitter<string>();
 

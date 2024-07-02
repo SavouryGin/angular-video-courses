@@ -3,6 +3,9 @@
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
   border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
   &_header {
     display: flex;
