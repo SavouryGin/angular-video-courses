@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Course } from '../../models/course';
-import { FilterPipe } from '../../pipes/filter';
 import { CoursesService } from '../../services/courses/courses.service';
+import { FilterPipe } from '../../pipes/filter';
 
 @Component({
   selector: 'app-courses-page',
@@ -16,10 +16,6 @@ export class CoursesPageComponent implements OnInit {
     private coursesService: CoursesService,
     private filterPipe: FilterPipe
   ) {}
-
-  ngOnChanges() {
-    console.log('CoursesPageComponent ngOnChanges');
-  }
 
   ngOnInit() {
     this.courses = this.coursesService.getCourses();
@@ -39,6 +35,11 @@ export class CoursesPageComponent implements OnInit {
       this.courses = this.coursesService.getCourses();
       this.filteredCourses = this.filterPipe.transform(this.courses, '');
     }
+  }
+
+  onCourseEdit(courseId: string) {
+    console.log(`Editing course: ${courseId}`);
+    // Logic to handle editing can be added here
   }
 
   trackByCourseId(index: number, course: Course): string {
