@@ -1,18 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { BreadcrumbsComponent } from './breadcrumbs.component';
+import { Router } from '@angular/router';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Location } from '@angular/common';
+import { By } from '@angular/platform-browser';
 
 describe('BreadcrumbsComponent', () => {
   let component: BreadcrumbsComponent;
   let fixture: ComponentFixture<BreadcrumbsComponent>;
+  let router: Router;
+  let location: Location;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [BreadcrumbsComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(BreadcrumbsComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+    location = TestBed.inject(Location);
     fixture.detectChanges();
   });
 
@@ -30,11 +40,5 @@ describe('BreadcrumbsComponent', () => {
   it('should have a list element within the navigation element', () => {
     const olElement = fixture.debugElement.query(By.css('nav ol'));
     expect(olElement).toBeTruthy();
-  });
-
-  it('should have a list item with a link to the home page', () => {
-    const linkElement = fixture.debugElement.query(By.css('nav ol li a'));
-    expect(linkElement.nativeElement.getAttribute('href')).toBe('/');
-    expect(linkElement.nativeElement.textContent).toBe('Courses');
   });
 });

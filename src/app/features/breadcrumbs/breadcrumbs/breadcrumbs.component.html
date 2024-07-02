@@ -1,6 +1,7 @@
 <nav aria-label="Breadcrumb" class="breadcrumbs" *ngIf="showBreadcrumbs()">
   <ol>
-    <li><a href="/">Courses</a></li>
-    <!-- Future breadcrumb items can be added here -->
+    <li *ngFor="let breadcrumb of breadcrumbs">
+      <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+    </li>
   </ol>
 </nav>
