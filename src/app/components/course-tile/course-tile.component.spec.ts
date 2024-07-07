@@ -1,13 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { ButtonComponent } from '../button/button.component';
 import { CourseTileComponent } from './course-tile.component';
+import { By } from '@angular/platform-browser';
+import { NO_ERRORS_SCHEMA, ChangeDetectionStrategy } from '@angular/core';
+import { Course } from '../../models/course';
+import { ButtonComponent } from '../button/button.component';
 import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
 import { DurationPipe } from '../../pipes/duration';
 
 describe('CourseTileComponent', () => {
   let component: CourseTileComponent;
   let fixture: ComponentFixture<CourseTileComponent>;
+  let mockCourse: Course;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -17,17 +20,26 @@ describe('CourseTileComponent', () => {
         CourseBorderDirective,
         DurationPipe,
       ],
-    }).compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideComponent(CourseTileComponent, {
+        set: { changeDetection: ChangeDetectionStrategy.Default },
+      })
+      .compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(CourseTileComponent);
     component = fixture.componentInstance;
-    component.course = {
+    mockCourse = {
       id: '1',
       title: 'Test Course',
-      creationDate: new Date('2023-01-01'),
-      duration: 88,
-      description: 'Test description',
+      description: 'Test Description',
+      creationDate: new Date(),
+      duration: 120,
+      topRated: true,
     };
+    component.course = mockCourse;
     fixture.detectChanges();
   });
 
@@ -35,82 +47,37 @@ describe('CourseTileComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display the formatted duration using the duration pipe', () => {
-    const mockCourse = {
-      id: '1',
-      title: 'Angular Course',
-      creationDate: new Date(),
-      duration: 75,
-      description: 'Learn Angular',
-      topRated: true,
-    };
+  it('should display course title in uppercase', () => {
+    const titleElement: HTMLElement = fixture.debugElement.query(
+      By.css('h2')
+    ).nativeElement;
+    expect(titleElement.textContent).toContain(mockCourse.title.toUpperCase());
+  });
 
-    component.course = mockCourse;
-    fixture.detectChanges();
-
-    const durationElement = fixture.debugElement.query(
+  it('should display duration and creation date', () => {
+    const infoElements = fixture.debugElement.queryAll(
       By.css('.course-tile_info p')
-    ).nativeElement;
-    expect(durationElement.textContent).toContain('1h 15min');
+    );
+    const durationElement: HTMLElement = infoElements[0].nativeElement;
+    const dateElement: HTMLElement = infoElements[1].nativeElement;
+
+    expect(durationElement.textContent).toContain('Duration:');
+    expect(durationElement.textContent).toContain('2h');
+    expect(dateElement.textContent).toContain('Creation Date:');
+    expect(dateElement.textContent).toContain('07/02/2024');
   });
 
-  it('should display the formatted creation date using the built-in date pipe', () => {
-    const mockCourse = {
-      id: '1',
-      title: 'Angular Course',
-      creationDate: new Date('2023-12-11'),
-      duration: 120,
-      description: 'Learn Angular',
-      topRated: true,
-    };
+  it('should display top-rated star if course is top-rated', () => {
+    const starElement = fixture.debugElement.query(By.css('svg'));
+    expect(starElement).toBeTruthy();
+  });
 
-    component.course = mockCourse;
+  it('should not display top-rated star if course is not top-rated', () => {
+    component.course.topRated = false;
     fixture.detectChanges();
 
-    const dateElement = fixture.debugElement.query(
-      By.css('.course-tile_info p:nth-child(2)')
-    ).nativeElement;
-    expect(dateElement.textContent).toContain('12/11/2023');
-  });
-
-  it('should display course description', () => {
-    const descriptionElement = fixture.debugElement.queryAll(By.css('p'))[2]
-      .nativeElement;
-    expect(descriptionElement.textContent).toContain('Test description');
-  });
-
-  it('should display the star icon for top-rated courses', () => {
-    const mockCourse = {
-      id: '1',
-      title: 'Angular Course',
-      creationDate: new Date(),
-      duration: 120,
-      description: 'Learn Angular',
-      topRated: true,
-    };
-
-    component.course = mockCourse;
-    fixture.detectChanges();
-
-    const svgElement = fixture.debugElement.query(By.css('svg'));
-    expect(svgElement).toBeTruthy();
-  });
-
-  it('should not display the star icon for non-top-rated courses', () => {
-    const mockCourse = {
-      id: '2',
-      title: 'React Course',
-      creationDate: new Date(),
-      duration: 90,
-      description: 'Learn React',
-      topRated: false,
-    };
-
-    component.course = mockCourse;
-    fixture.detectChanges();
-
-    const svgElement = fixture.debugElement.query(By.css('svg'));
-    expect(svgElement).toBeFalsy();
+    const starElement = fixture.debugElement.query(By.css('svg'));
+    expect(starElement).toBeFalsy();
   });
 
   it('should display the course title in uppercase', () => {

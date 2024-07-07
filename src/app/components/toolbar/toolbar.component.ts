@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-toolbar',
@@ -10,12 +11,13 @@ export class ToolbarComponent {
 
   @Output() search = new EventEmitter<string>();
 
+  constructor(private router: Router) {}
+
   handleSearch() {
-    console.log('Search button clicked', this.searchQuery);
     this.search.emit(this.searchQuery);
   }
 
   handleAddCourse() {
-    console.log('Add Course button clicked');
+    this.router.navigate(['/courses/add']);
   }
 }

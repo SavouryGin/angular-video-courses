@@ -1,21 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ToolbarComponent } from './toolbar.component';
+import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { ToolbarComponent } from './toolbar.component';
 import { ButtonComponent } from '../button/button.component';
 
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
   let fixture: ComponentFixture<ToolbarComponent>;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
+    const routerMock = jasmine.createSpyObj('Router', ['navigate']);
+
     await TestBed.configureTestingModule({
       declarations: [ToolbarComponent, ButtonComponent],
       imports: [FormsModule],
+      providers: [{ provide: Router, useValue: routerMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ToolbarComponent);
     component = fixture.componentInstance;
+    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     fixture.detectChanges();
   });
 
@@ -23,63 +29,46 @@ describe('ToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call console.log with the entered value when the Search button is clicked', () => {
-    const inputElement = fixture.debugElement.query(
-      By.css('input')
-    ).nativeElement;
-    const searchButtonDebugElement = fixture.debugElement.query(
+  it('should emit search query when search button is clicked', () => {
+    spyOn(component.search, 'emit');
+    component.searchQuery = 'Test Search';
+    fixture.detectChanges();
+
+    const searchButton = fixture.debugElement.query(
       By.css('.toolbar_search-button')
     );
-    const searchButtonNativeElement =
-      searchButtonDebugElement.nativeElement.querySelector('button');
-    const testValue = 'Angular';
+    searchButton.triggerEventHandler('onClick', null);
 
-    spyOn(console, 'log');
-    inputElement.value = testValue;
-    inputElement.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-
-    searchButtonNativeElement.click();
-    fixture.detectChanges();
-
-    expect(console.log).toHaveBeenCalledWith(
-      'Search button clicked',
-      testValue
-    );
+    expect(component.search.emit).toHaveBeenCalledWith('Test Search');
   });
 
-  it('should call console.log with the entered value when Enter key is pressed', () => {
-    const inputElement = fixture.debugElement.query(
-      By.css('input')
-    ).nativeElement;
-    const testValue = 'React';
-
-    spyOn(console, 'log');
-    inputElement.value = testValue;
-    inputElement.dispatchEvent(new Event('input'));
+  it('should emit search query when enter key is pressed in the input', () => {
+    spyOn(component.search, 'emit');
+    component.searchQuery = 'Test Search';
     fixture.detectChanges();
 
-    inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-    fixture.detectChanges();
+    const input = fixture.debugElement.query(By.css('.toolbar_input'));
+    input.triggerEventHandler('keydown.enter', new Event('keydown'));
 
-    expect(console.log).toHaveBeenCalledWith(
-      'Search button clicked',
-      testValue
-    );
+    expect(component.search.emit).toHaveBeenCalledWith('Test Search');
   });
 
-  it('should call console.log when the Add Course button is clicked', () => {
-    const addButtonDebugElement = fixture.debugElement.query(
+  it('should navigate to add course page when add course button is clicked', () => {
+    const addCourseButton = fixture.debugElement.query(
       By.css('.toolbar_add-button')
     );
-    const addButtonNativeElement =
-      addButtonDebugElement.nativeElement.querySelector('button');
+    addCourseButton.triggerEventHandler('onClick', null);
 
-    spyOn(console, 'log');
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/courses/add']);
+  });
 
-    addButtonNativeElement.click();
-    fixture.detectChanges();
+  it('should bind input value to searchQuery property', async () => {
+    const input = fixture.nativeElement.querySelector('.toolbar_input');
+    input.value = 'Test Search';
+    input.dispatchEvent(new Event('input'));
 
-    expect(console.log).toHaveBeenCalledWith('Add Course button clicked');
+    await fixture.whenStable();
+
+    expect(component.searchQuery).toBe('Test Search');
   });
 });

@@ -1,0 +1,14 @@
+<div class="numeric-input">
+  <label for="{{ id }}">{{ label }}</label>
+  <input
+    type="number"
+    [value]="value"
+    [name]="name"
+    [placeholder]="placeholder"
+    [id]="id"
+    [min]="min"
+    [max]="max"
+    [step]="step"
+    (input)="handleInputChange($event)"
+  />
+</div>
