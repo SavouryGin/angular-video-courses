@@ -4,11 +4,11 @@ import { FilterPipe } from '../../../pipes/filter';
 import { Course } from '../../../models/course';
 
 @Component({
-  selector: 'app-courses-page',
-  templateUrl: './courses-page.component.html',
-  styleUrls: ['./courses-page.component.scss'],
+  selector: 'app-courses-list',
+  templateUrl: './courses-list.component.html',
+  styleUrls: ['./courses-list.component.scss'],
 })
-export class CoursesPageComponent implements OnInit {
+export class CoursesListComponent implements OnInit {
   courses: Course[] = [];
   filteredCourses: Course[] = [];
 

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { CoursesPageComponent } from './courses-page.component';
+import { CoursesListComponent } from './courses-list.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { CourseTileComponent } from '../../../components/course-tile/course-tile.component';
@@ -11,15 +11,15 @@ import { DurationPipe } from '../../../pipes/duration';
 import { CourseBorderDirective } from '../../../directives/course-border/course-border.directive';
 import { COURSES_LIST } from '../../../../__mocks__/course-list';
 
-describe('CoursesPageComponent', () => {
-  let component: CoursesPageComponent;
-  let fixture: ComponentFixture<CoursesPageComponent>;
+describe('CoursesListComponent', () => {
+  let component: CoursesListComponent;
+  let fixture: ComponentFixture<CoursesListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule, SharedModule],
       declarations: [
-        CoursesPageComponent,
+        CoursesListComponent,
         CourseTileComponent,
         ToolbarComponent,
         CourseBorderDirective,
@@ -29,7 +29,7 @@ describe('CoursesPageComponent', () => {
       providers: [FilterPipe],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CoursesPageComponent);
+    fixture = TestBed.createComponent(CoursesListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

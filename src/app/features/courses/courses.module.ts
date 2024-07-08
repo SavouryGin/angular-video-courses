@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { authGuard } from '../../guards/auth.guard';
-import { CoursesPageComponent } from './courses-page/courses-page.component';
+import { CoursesListComponent } from './courses-list/courses-list.component';
 import { AddCourseComponent } from './add-course/add-course.component';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ import { ToolbarComponent } from '../../components/toolbar/toolbar.component';
 const routes: Routes = [
   {
     path: '',
-    component: CoursesPageComponent,
+    component: CoursesListComponent,
     canActivate: [authGuard],
   },
   {
@@ -28,7 +28,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    CoursesPageComponent,
+    CoursesListComponent,
     AddCourseComponent,
     CourseTileComponent,
     CourseBorderDirective,
