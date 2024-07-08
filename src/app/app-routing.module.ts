@@ -13,7 +13,14 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/login/login.module').then((m) => m.LoginModule),
   },
-  { path: '**', redirectTo: '/courses' },
+  {
+    path: 'not-found',
+    loadChildren: () =>
+      import('./features/not-found/not-found.module').then(
+        (m) => m.NotFoundModule
+      ),
+  },
+  { path: '**', redirectTo: 'not-found' },
 ];
 
 @NgModule({
