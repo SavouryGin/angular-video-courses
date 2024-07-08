@@ -18,6 +18,6 @@ export class ToolbarComponent {
   }
 
   handleAddCourse() {
-    this.router.navigate(['/courses/add']);
+    this.router.navigate(['/courses/new']);
   }
 }
