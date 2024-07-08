@@ -35,7 +35,7 @@ describe('CourseTileComponent', () => {
       id: '1',
       title: 'Test Course',
       description: 'Test Description',
-      creationDate: new Date(),
+      creationDate: new Date('2024-07-02'),
       duration: 120,
       topRated: true,
     };

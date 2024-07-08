@@ -3,11 +3,8 @@ import { AddCourseComponent } from './add-course.component';
 import { Router } from '@angular/router';
 
 import { FormsModule } from '@angular/forms';
-import { TextInputComponent } from '../text-input/text-input.component';
-import { TextAreaComponent } from '../text-area/text-area.component';
-import { NumericInputComponent } from '../numeric-input/numeric-input.component';
-import { ButtonComponent } from '../button/button.component';
-import { CoursesService } from '../../services/courses/courses.service';
+import { SharedModule } from '../../../shared/shared.module';
+import { CoursesService } from '../../../services/courses/courses.service';
 
 describe('AddCourseComponent', () => {
   let component: AddCourseComponent;
@@ -22,14 +19,8 @@ describe('AddCourseComponent', () => {
     const routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      declarations: [
-        AddCourseComponent,
-        TextInputComponent,
-        TextAreaComponent,
-        NumericInputComponent,
-        ButtonComponent,
-      ],
-      imports: [FormsModule],
+      declarations: [AddCourseComponent],
+      imports: [FormsModule, SharedModule],
       providers: [
         { provide: CoursesService, useValue: coursesServiceMock },
         { provide: Router, useValue: routerMock },

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-login-page',

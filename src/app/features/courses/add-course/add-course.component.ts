@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Course } from '../../models/course';
-import { CoursesService } from '../../services/courses/courses.service';
+import { CoursesService } from '../../../services/courses/courses.service';
+import { Course } from '../../../models/course';
 
 @Component({
   selector: 'app-add-course',

@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { CoursesPageComponent } from './courses-page.component';
-import { CourseTileComponent } from '../course-tile/course-tile.component';
-import { COURSES_LIST } from '../../../__mocks__/course-list';
-import { ButtonComponent } from '../button/button.component';
-import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
-import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
-import { DurationPipe } from '../../pipes/duration';
-import { FilterPipe } from '../../pipes/filter';
-import { OrderByPipe } from '../../pipes/order-by';
+import { SharedModule } from '../../../shared/shared.module';
+import { CourseTileComponent } from '../../../components/course-tile/course-tile.component';
+import { ToolbarComponent } from '../../../components/toolbar/toolbar.component';
+import { FilterPipe } from '../../../pipes/filter';
+import { OrderByPipe } from '../../../pipes/order-by';
+import { DurationPipe } from '../../../pipes/duration';
+import { CourseBorderDirective } from '../../../directives/course-border/course-border.directive';
+import { COURSES_LIST } from '../../../../__mocks__/course-list';
 
 describe('CoursesPageComponent', () => {
   let component: CoursesPageComponent;
@@ -17,11 +17,10 @@ describe('CoursesPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule],
+      imports: [FormsModule, SharedModule],
       declarations: [
         CoursesPageComponent,
         CourseTileComponent,
-        ButtonComponent,
         ToolbarComponent,
         CourseBorderDirective,
         DurationPipe,

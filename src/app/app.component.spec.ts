@@ -4,7 +4,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LogoComponent } from './components/logo/logo.component';
-import { CoursesPageComponent } from './components/courses-page/courses-page.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
@@ -25,10 +24,8 @@ describe('AppComponent', () => {
         HeaderComponent,
         FooterComponent,
         LogoComponent,
-        CoursesPageComponent,
         ButtonComponent,
         ToolbarComponent,
-        CoursesPageComponent,
         CourseTileComponent,
         CourseBorderDirective,
         DurationPipe,
