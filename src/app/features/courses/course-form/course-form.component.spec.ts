@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CourseForm } from './course-form.component';
 import { CoursesService } from '../../../services/courses/courses.service';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Course } from '../../../models/course';
-import { Router } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 
 class MockCoursesService {

@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { FilterPipe } from './pipes/filter';
 import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { SharedModule } from './shared/shared.module';
+import { RouteReuseStrategy } from '@angular/router';
+import { CustomRouteReuseStrategy } from './shared/strategies/custom-route-reuse-strategy';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent, LogoComponent],
@@ -20,7 +22,10 @@ import { SharedModule } from './shared/shared.module';
     BreadcrumbsModule,
     SharedModule,
   ],
-  providers: [FilterPipe],
+  providers: [
+    FilterPipe,
+    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
