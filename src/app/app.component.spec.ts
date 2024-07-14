@@ -1,10 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LogoComponent } from './components/logo/logo.component';
-import { CoursesPageComponent } from './components/courses-page/courses-page.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FormsModule } from '@angular/forms';
@@ -15,20 +13,19 @@ import { OrderByPipe } from './pipes/order-by';
 import { FilterPipe } from './pipes/filter';
 import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { CoursesService } from './services/courses/courses.service';
+import { RouterModule } from '@angular/router';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, FormsModule, BreadcrumbsModule],
+      imports: [RouterModule, FormsModule, BreadcrumbsModule],
       declarations: [
         AppComponent,
         HeaderComponent,
         FooterComponent,
         LogoComponent,
-        CoursesPageComponent,
         ButtonComponent,
         ToolbarComponent,
-        CoursesPageComponent,
         CourseTileComponent,
         CourseBorderDirective,
         DurationPipe,

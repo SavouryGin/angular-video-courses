@@ -1,12 +1,12 @@
-<div class="add-course">
-  <h2>Add New Course</h2>
+<div class="course-form">
+  <h2>{{ isEditMode ? "Edit Course" : "Add New Course" }}</h2>
   <form>
     <app-text-input
       label="Title"
       [(value)]="title"
       name="title"
       placeholder="Enter course title"
-      id="title"
+      id="course-form-title"
     ></app-text-input>
 
     <app-text-area
@@ -14,7 +14,7 @@
       [(value)]="description"
       name="description"
       placeholder="Enter course description"
-      id="description"
+      id="course-form-description"
     ></app-text-area>
 
     <app-text-input
@@ -22,7 +22,7 @@
       [(value)]="date"
       name="date"
       placeholder="Enter course date"
-      id="date"
+      id="course-form-date"
     ></app-text-input>
 
     <app-numeric-input
@@ -30,7 +30,7 @@
       [(value)]="duration"
       name="duration"
       placeholder="0"
-      id="duration"
+      id="course-form-duration"
       min="0"
     ></app-numeric-input>
 

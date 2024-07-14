@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { LoginPageComponent } from './login-page.component';
-import { ButtonComponent } from '../button/button.component';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 class MockAuthenticationService {
   login(email: string, password: string) {
@@ -24,8 +24,8 @@ describe('LoginPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoginPageComponent, ButtonComponent],
-      imports: [FormsModule],
+      declarations: [LoginPageComponent],
+      imports: [FormsModule, SharedModule],
       providers: [
         { provide: AuthenticationService, useClass: MockAuthenticationService },
         { provide: Router, useClass: MockRouter },

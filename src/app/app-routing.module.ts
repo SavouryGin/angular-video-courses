@@ -1,27 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CoursesPageComponent } from './components/courses-page/courses-page.component';
-import { LoginPageComponent } from './components/login-page/login-page.component';
-import { authGuard } from './guards/auth.guard';
-import { AddCourseComponent } from './components/add-course/add-course.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/courses', pathMatch: 'full' },
   {
     path: 'courses',
-    component: CoursesPageComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'courses/add',
-    component: AddCourseComponent,
-    canActivate: [authGuard],
+    loadChildren: () =>
+      import('./features/courses/courses.module').then((m) => m.CoursesModule),
   },
   {
     path: 'login',
-    component: LoginPageComponent,
+    loadChildren: () =>
+      import('./features/login/login.module').then((m) => m.LoginModule),
   },
-  { path: '**', redirectTo: '/courses' },
+  {
+    path: 'not-found',
+    loadChildren: () =>
+      import('./features/not-found/not-found.module').then(
+        (m) => m.NotFoundModule
+      ),
+  },
+  { path: '**', redirectTo: 'not-found' },
 ];
 
 @NgModule({

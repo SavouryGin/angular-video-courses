@@ -59,7 +59,7 @@ describe('ToolbarComponent', () => {
     );
     addCourseButton.triggerEventHandler('onClick', null);
 
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/courses/add']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/courses/new']);
   });
 
   it('should bind input value to searchQuery property', async () => {

@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { Course } from '../../models/course';
-import { CoursesService } from '../../services/courses/courses.service';
-import { FilterPipe } from '../../pipes/filter';
+import { CoursesService } from '../../../services/courses/courses.service';
+import { FilterPipe } from '../../../pipes/filter';
+import { Course } from '../../../models/course';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-courses-page',
-  templateUrl: './courses-page.component.html',
-  styleUrls: ['./courses-page.component.scss'],
+  selector: 'app-courses-list',
+  templateUrl: './courses-list.component.html',
+  styleUrls: ['./courses-list.component.scss'],
 })
-export class CoursesPageComponent implements OnInit {
+export class CoursesListComponent implements OnInit {
   courses: Course[] = [];
   filteredCourses: Course[] = [];
 
   constructor(
     private coursesService: CoursesService,
-    private filterPipe: FilterPipe
+    private filterPipe: FilterPipe,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -38,8 +40,7 @@ export class CoursesPageComponent implements OnInit {
   }
 
   onCourseEdit(courseId: string) {
-    console.log(`Editing course: ${courseId}`);
-    // Logic to handle editing can be added here
+    this.router.navigate([`/courses/${courseId}`]);
   }
 
   trackByCourseId(index: number, course: Course): string {

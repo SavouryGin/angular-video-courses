@@ -1,0 +1,26 @@
+:host {
+  background-color: whitesmoke;
+}
+
+.not-found {
+  text-align: center;
+  margin-top: 50px;
+
+  h1 {
+    font-size: 3rem;
+    color: dodgerblue;
+  }
+
+  p {
+    font-size: 1.5rem;
+  }
+
+  a {
+    font-size: 1.2rem;
+    color: dodgerblue;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
