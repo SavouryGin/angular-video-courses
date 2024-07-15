@@ -10,21 +10,24 @@ describe('FilterPipe', () => {
     courses = [
       {
         id: '1',
-        title: 'Angular Basics',
-        creationDate: new Date(),
-        duration: 60,
+        name: 'Angular Basics',
+        date: '2023-12-01',
+        length: 60,
+        authors: [],
       },
       {
         id: '2',
-        title: 'Advanced Angular',
-        creationDate: new Date(),
-        duration: 120,
+        name: 'Advanced Angular',
+        date: '2023-12-01',
+        length: 120,
+        authors: [],
       },
       {
         id: '3',
-        title: 'React for Beginners',
-        creationDate: new Date(),
-        duration: 90,
+        name: 'React for Beginners',
+        date: '2023-12-01',
+        length: 90,
+        authors: [],
       },
     ];
   });
@@ -33,7 +36,7 @@ describe('FilterPipe', () => {
     expect(pipe).toBeTruthy();
   });
 
-  it('should filter courses by title', () => {
+  it('should filter courses by name', () => {
     expect(pipe.transform(courses, 'angular').length).toBe(2);
     expect(pipe.transform(courses, 'react').length).toBe(1);
   });

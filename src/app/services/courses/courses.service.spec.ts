@@ -27,11 +27,12 @@ describe('CoursesService', () => {
   it('should create a new course', () => {
     const newCourse: Course = {
       id: '4',
-      title: 'New Course',
-      creationDate: new Date(),
-      duration: 120,
+      name: 'New Course',
+      date: '2024-05-01',
+      length: 120,
       description: 'This is a new course',
-      topRated: false,
+      isTopRated: false,
+      authors: [],
     };
     service.createCourse(newCourse);
     expect(service.getCourses()).toContain(newCourse);
@@ -40,10 +41,10 @@ describe('CoursesService', () => {
   it('should update an existing course', () => {
     const updatedCourse: Course = {
       ...COURSES_LIST[0],
-      title: 'Updated Course',
+      name: 'Updated Course',
     };
     service.updateCourse(updatedCourse);
-    expect(service.getCourseById(updatedCourse.id)?.title).toBe(
+    expect(service.getCourseById(updatedCourse.id)?.name).toBe(
       'Updated Course'
     );
   });

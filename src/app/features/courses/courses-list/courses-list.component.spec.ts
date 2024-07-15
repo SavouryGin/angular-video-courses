@@ -60,7 +60,7 @@ describe('CoursesListComponent', () => {
     );
     expect(filteredCourseElements.length).toBe(
       COURSES_LIST.filter((course) =>
-        course.title.toLowerCase().includes('angular')
+        course.name.toLowerCase().includes('angular')
       ).length
     );
   });

@@ -10,11 +10,12 @@ class MockCoursesService {
   getCourseById(id: string): Course | undefined {
     return {
       id,
-      title: 'Existing Course',
+      name: 'Existing Course',
       description: 'Course Description',
-      creationDate: new Date(),
-      duration: 120,
-      topRated: false,
+      date: '2022-01-01',
+      length: 120,
+      isTopRated: false,
+      authors: [],
     };
   }
   createCourse(course: Course) {}
@@ -61,7 +62,7 @@ describe('CourseForm', () => {
     fixture.detectChanges();
     expect(component.title).toBe('Existing Course');
     expect(component.description).toBe('Course Description');
-    expect(component.date).toBe(new Date().toISOString().split('T')[0]);
+    expect(component.date).toBe('2022-01-01');
     expect(component.duration).toBe(120);
   });
 
@@ -77,10 +78,12 @@ describe('CourseForm', () => {
 
     expect(coursesService.createCourse).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        title: 'New Course',
+        name: 'New Course',
         description: 'New Description',
-        creationDate: new Date('2024-12-25'),
-        duration: 90,
+        date: '2024-12-25',
+        length: 90,
+        isTopRated: false,
+        authors: [],
       })
     );
     expect(router.navigate).toHaveBeenCalledWith(['/']);
@@ -99,10 +102,12 @@ describe('CourseForm', () => {
     expect(coursesService.updateCourse).toHaveBeenCalledWith(
       jasmine.objectContaining({
         id: '1',
-        title: 'Updated Course',
+        name: 'Updated Course',
         description: 'Updated Description',
-        creationDate: new Date('2024-12-25'),
-        duration: 100,
+        date: '2024-12-25',
+        length: 100,
+        isTopRated: false,
+        authors: [],
       })
     );
     expect(router.navigate).toHaveBeenCalledWith(['/']);

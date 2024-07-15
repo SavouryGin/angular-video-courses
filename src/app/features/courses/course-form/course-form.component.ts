@@ -29,10 +29,10 @@ export class CourseForm implements OnInit {
       this.isEditMode = true;
       const course = this.coursesService.getCourseById(this.courseId);
       if (course) {
-        this.title = course.title;
+        this.title = course.name;
         this.description = course.description ?? '';
-        this.date = new Date(course.creationDate).toISOString().split('T')[0];
-        this.duration = course.duration;
+        this.date = new Date(course.date).toISOString().split('T')[0];
+        this.duration = course.length;
       }
     }
   }
@@ -40,11 +40,12 @@ export class CourseForm implements OnInit {
   updateCourse() {
     const updatedCourse: Course = {
       id: this.courseId!,
-      title: this.title,
+      name: this.title,
       description: this.description,
-      creationDate: new Date(this.date),
-      duration: +this.duration,
-      topRated: false,
+      date: this.date,
+      length: +this.duration,
+      isTopRated: false,
+      authors: [],
     };
     this.coursesService.updateCourse(updatedCourse);
   }
@@ -52,11 +53,12 @@ export class CourseForm implements OnInit {
   addCourse() {
     const newCourse: Course = {
       id: crypto.randomUUID(),
-      title: this.title,
+      name: this.title,
       description: this.description,
-      creationDate: new Date(this.date),
-      duration: +this.duration,
-      topRated: false,
+      date: this.date,
+      length: +this.duration,
+      isTopRated: false,
+      authors: [],
     };
     this.coursesService.createCourse(newCourse);
   }

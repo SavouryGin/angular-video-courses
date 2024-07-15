@@ -12,35 +12,38 @@ describe('OrderByPipe', () => {
     expect(pipe).toBeTruthy();
   });
 
-  it('should order courses by creationDate in descending order', () => {
+  it('should order courses by date in descending order', () => {
     const courses: Course[] = [
       {
         id: '1',
-        title: 'Course 1',
-        creationDate: new Date('2023-12-01'),
-        duration: 60,
+        name: 'Course 1',
+        date: '2023-12-01',
+        length: 60,
         description: 'Description 1',
-        topRated: false,
+        isTopRated: false,
+        authors: [],
       },
       {
         id: '2',
-        title: 'Course 2',
-        creationDate: new Date('2023-12-05'),
-        duration: 120,
+        name: 'Course 2',
+        date: '2023-12-05',
+        length: 120,
         description: 'Description 2',
-        topRated: true,
+        isTopRated: true,
+        authors: [],
       },
       {
         id: '3',
-        title: 'Course 3',
-        creationDate: new Date('2023-12-03'),
-        duration: 90,
+        name: 'Course 3',
+        date: '2023-12-03',
+        length: 90,
         description: 'Description 3',
-        topRated: false,
+        isTopRated: false,
+        authors: [],
       },
     ];
 
-    const sortedCourses = pipe.transform(courses, 'creationDate');
+    const sortedCourses = pipe.transform(courses, 'date');
     expect(sortedCourses[0].id).toBe('2');
     expect(sortedCourses[1].id).toBe('3');
     expect(sortedCourses[2].id).toBe('1');

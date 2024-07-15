@@ -7,14 +7,14 @@ import { By } from '@angular/platform-browser';
   template: `
     <div
       appCourseBorder
-      [creationDate]="creationDate"
+      [date]="date"
       [freshBorderColor]="'green'"
       [upcomingBorderColor]="'blue'"
     ></div>
   `,
 })
 class TestComponent {
-  creationDate!: Date;
+  date!: Date;
 }
 
 describe('CourseBorderDirective', () => {
@@ -34,7 +34,7 @@ describe('CourseBorderDirective', () => {
     const testComponent = fixture.componentInstance;
     const freshDate = new Date();
     freshDate.setDate(freshDate.getDate() - 2);
-    testComponent.creationDate = freshDate;
+    testComponent.date = freshDate;
     fixture.detectChanges();
 
     const expectedBorder = '2px solid green';
@@ -45,7 +45,7 @@ describe('CourseBorderDirective', () => {
     const testComponent = fixture.componentInstance;
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + 10);
-    testComponent.creationDate = futureDate;
+    testComponent.date = futureDate;
     fixture.detectChanges();
 
     const expectedBorder = '2px solid blue';
@@ -56,7 +56,7 @@ describe('CourseBorderDirective', () => {
     const testComponent = fixture.componentInstance;
     const pastDate = new Date();
     pastDate.setDate(pastDate.getDate() - 20);
-    testComponent.creationDate = pastDate;
+    testComponent.date = pastDate;
     fixture.detectChanges();
 
     expect(divEl.nativeElement.style.border).toBe('');

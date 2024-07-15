@@ -10,7 +10,7 @@ export class FilterPipe implements PipeTransform {
       return courses;
     }
     return courses.filter((course) =>
-      course.title.toLowerCase().includes(query.toLowerCase())
+      course.name.toLowerCase().includes(query.toLowerCase())
     );
   }
 }

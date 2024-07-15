@@ -10,14 +10,14 @@ import {
   selector: '[appCourseBorder]',
 })
 export class CourseBorderDirective implements OnChanges {
-  @Input() creationDate!: Date;
+  @Input() date!: Date;
   @Input() freshBorderColor: string = 'green';
   @Input() upcomingBorderColor: string = 'blue';
 
   constructor(private el: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['creationDate'] && this.creationDate) {
+    if (changes['date'] && this.date) {
       this.setBorder();
     }
   }
@@ -28,8 +28,8 @@ export class CourseBorderDirective implements OnChanges {
     fourteenDaysAgo.setDate(currentDate.getDate() - 14);
 
     const isFreshCourse =
-      this.creationDate < currentDate && this.creationDate >= fourteenDaysAgo;
-    const isUpcomingCourse = this.creationDate > currentDate;
+      this.date < currentDate && this.date >= fourteenDaysAgo;
+    const isUpcomingCourse = this.date > currentDate;
 
     if (isFreshCourse) {
       this.el.nativeElement.style.border = `2px solid ${this.freshBorderColor}`;
