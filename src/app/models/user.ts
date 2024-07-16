@@ -1,12 +1,12 @@
 export interface User {
   id: number;
-  token: string;
+  fakeToken: string;
   name: UserName;
-  login: string;
+  email: string;
   password: string;
 }
 
 export interface UserName {
-  firstName: string;
-  lastName: string;
+  first: string;
+  last: string;
 }

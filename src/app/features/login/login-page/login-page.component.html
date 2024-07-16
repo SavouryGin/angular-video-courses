@@ -37,4 +37,7 @@
       ></app-button>
     </div>
   </div>
+  <div *ngIf="errorMessage" class="login-container_error-message">
+    {{ errorMessage }}
+  </div>
 </div>

@@ -12,6 +12,7 @@ import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { SharedModule } from './shared/shared.module';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from './shared/strategies/custom-route-reuse-strategy';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent, LogoComponent],
@@ -21,6 +22,7 @@ import { CustomRouteReuseStrategy } from './shared/strategies/custom-route-reuse
     FormsModule,
     BreadcrumbsModule,
     SharedModule,
+    HttpClientModule,
   ],
   providers: [
     FilterPipe,

@@ -10,6 +10,7 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 export class LoginPageComponent {
   email: string = '';
   password: string = '';
+  errorMessage: string = '';
 
   constructor(
     private authService: AuthenticationService,
@@ -17,7 +18,16 @@ export class LoginPageComponent {
   ) {}
 
   handleLogin() {
-    this.authService.login(this.email, this.password);
-    this.router.navigate(['/courses']);
+    this.errorMessage = ''; // Clear any previous error message
+    this.authService.login(this.email, this.password).subscribe({
+      next: () => {
+        this.router.navigate(['/courses']);
+      },
+      error: (err) => {
+        console.error('Login failed', err);
+        this.errorMessage =
+          'Login failed. Please check your credentials and try again.';
+      },
+    });
   }
 }
