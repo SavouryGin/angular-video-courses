@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CoursesService } from '../../../services/courses/courses.service';
 import { Course } from '../../../models/course';
 
@@ -8,13 +8,14 @@ import { Course } from '../../../models/course';
   templateUrl: './course-form.component.html',
   styleUrls: ['./course-form.component.scss'],
 })
-export class CourseForm implements OnInit {
+export class CourseFormComponent implements OnInit {
   title: string = '';
   description: string = '';
   date: string = '';
   duration: number | string = '';
   isEditMode: boolean = false;
   courseId?: string;
+  errorMessage: string | null = null;
 
   constructor(
     private coursesService: CoursesService,
@@ -27,13 +28,18 @@ export class CourseForm implements OnInit {
 
     if (this.courseId) {
       this.isEditMode = true;
-      const course = this.coursesService.getCourseById(this.courseId);
-      if (course) {
-        this.title = course.name;
-        this.description = course.description ?? '';
-        this.date = new Date(course.date).toISOString().split('T')[0];
-        this.duration = course.length;
-      }
+      this.coursesService.getCourseById(this.courseId).subscribe({
+        next: (course) => {
+          this.title = course.name;
+          this.description = course.description ?? '';
+          this.date = new Date(course.date).toISOString().split('T')[0];
+          this.duration = course.length;
+        },
+        error: (error) => {
+          this.errorMessage = 'Failed to load course details';
+          console.error('Error loading course details', error);
+        },
+      });
     }
   }
 
@@ -47,7 +53,16 @@ export class CourseForm implements OnInit {
       isTopRated: false,
       authors: [],
     };
-    this.coursesService.updateCourse(updatedCourse);
+
+    this.coursesService.updateCourse(updatedCourse).subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to update course';
+        console.error('Error updating course', error);
+      },
+    });
   }
 
   addCourse() {
@@ -60,7 +75,16 @@ export class CourseForm implements OnInit {
       isTopRated: false,
       authors: [],
     };
-    this.coursesService.createCourse(newCourse);
+
+    this.coursesService.createCourse(newCourse).subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to add course';
+        console.error('Error adding course', error);
+      },
+    });
   }
 
   handleSave() {
@@ -69,7 +93,6 @@ export class CourseForm implements OnInit {
     } else {
       this.addCourse();
     }
-    this.router.navigate(['/']);
   }
 
   handleCancel() {

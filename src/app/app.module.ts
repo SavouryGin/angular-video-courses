@@ -7,12 +7,12 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LogoComponent } from './components/logo/logo.component';
 import { FormsModule } from '@angular/forms';
-import { FilterPipe } from './pipes/filter';
 import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { SharedModule } from './shared/shared.module';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from './shared/strategies/custom-route-reuse-strategy';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './services/authentication/auth.interceptor';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent, LogoComponent],
@@ -25,8 +25,12 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
   ],
   providers: [
-    FilterPipe,
     { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

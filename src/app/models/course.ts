@@ -9,3 +9,10 @@ export interface Course {
   description?: string;
   isTopRated?: boolean;
 }
+
+export interface CoursesResponse {
+  content: Course[];
+  page: number | null;
+  pageSize: number | null;
+  totalLength: number;
+}

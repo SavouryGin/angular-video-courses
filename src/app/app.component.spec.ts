@@ -10,7 +10,6 @@ import { CourseTileComponent } from './components/course-tile/course-tile.compon
 import { CourseBorderDirective } from './directives/course-border/course-border.directive';
 import { DurationPipe } from './pipes/duration';
 import { OrderByPipe } from './pipes/order-by';
-import { FilterPipe } from './pipes/filter';
 import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { CoursesService } from './services/courses/courses.service';
 import { RouterModule } from '@angular/router';
@@ -37,7 +36,7 @@ describe('AppComponent', () => {
         DurationPipe,
         OrderByPipe,
       ],
-      providers: [FilterPipe, CoursesService],
+      providers: [CoursesService],
     }).compileComponents();
   });
 

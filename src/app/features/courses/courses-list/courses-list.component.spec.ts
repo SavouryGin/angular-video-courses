@@ -1,36 +1,55 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { CoursesListComponent } from './courses-list.component';
-import { FormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
-import { CourseTileComponent } from '../../../components/course-tile/course-tile.component';
-import { ToolbarComponent } from '../../../components/toolbar/toolbar.component';
-import { FilterPipe } from '../../../pipes/filter';
-import { OrderByPipe } from '../../../pipes/order-by';
-import { DurationPipe } from '../../../pipes/duration';
-import { CourseBorderDirective } from '../../../directives/course-border/course-border.directive';
-import { COURSES_LIST } from '../../../../__mocks__/course-list';
+import { CoursesService } from '../../../services/courses/courses.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of, throwError } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CoursesResponse } from '../../../models/course';
+import { RouterModule } from '@angular/router';
 
 describe('CoursesListComponent', () => {
   let component: CoursesListComponent;
   let fixture: ComponentFixture<CoursesListComponent>;
+  let coursesService: CoursesService;
+
+  const mockCoursesResponse: CoursesResponse = {
+    content: [
+      {
+        id: '1',
+        name: 'Course 1',
+        date: '2023-01-01',
+        length: 120,
+        authors: [],
+      },
+      {
+        id: '2',
+        name: 'Course 2',
+        date: '2023-01-02',
+        length: 90,
+        authors: [],
+      },
+    ],
+    page: 0,
+    pageSize: 5,
+    totalLength: 2,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, SharedModule],
-      declarations: [
-        CoursesListComponent,
-        CourseTileComponent,
-        ToolbarComponent,
-        CourseBorderDirective,
-        DurationPipe,
-        OrderByPipe,
-      ],
-      providers: [FilterPipe],
+      declarations: [CoursesListComponent],
+      imports: [RouterModule, HttpClientTestingModule],
+      providers: [CoursesService],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(CoursesListComponent);
     component = fixture.componentInstance;
+    coursesService = TestBed.inject(CoursesService);
     fixture.detectChanges();
   });
 
@@ -38,30 +57,38 @@ describe('CoursesListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display a list of courses', () => {
-    const courseElements = fixture.debugElement.queryAll(
-      By.css('app-course-tile')
+  it('should load courses on init', () => {
+    spyOn(coursesService, 'getCourses').and.returnValue(
+      of(mockCoursesResponse)
     );
-    expect(courseElements.length).toBe(COURSES_LIST.length);
+    component.ngOnInit();
+    expect(coursesService.getCourses).toHaveBeenCalledWith(0, 5, '');
+    expect(component.courses.length).toBe(2);
   });
 
-  it('should display "No Data" message when no courses are found', () => {
-    component.filteredCourses = [];
-    fixture.detectChanges();
-    const noDataElement = fixture.debugElement.query(By.css('p'));
-    expect(noDataElement.nativeElement.textContent).toContain('No Data');
+  it('should handle error when loading courses', () => {
+    spyOn(coursesService, 'getCourses').and.returnValue(
+      throwError(() => new Error('Failed to load courses'))
+    );
+    component.ngOnInit();
+    expect(component.errorMessage).toBe('Failed to load courses');
   });
 
-  it('should filter courses based on search query', () => {
-    component.onSearch('Angular');
+  it('should reset courses and search', () => {
+    spyOn(coursesService, 'getCourses').and.returnValue(
+      of(mockCoursesResponse)
+    );
+    component.onSearch('Course');
+    expect(coursesService.getCourses).toHaveBeenCalledWith(0, 5, 'Course');
+    expect(component.courses.length).toBe(2);
+  });
+
+  it('should display "No Data" when courses list is empty', () => {
+    component.courses = [];
     fixture.detectChanges();
-    const filteredCourseElements = fixture.debugElement.queryAll(
-      By.css('app-course-tile')
+    const noDataElement: DebugElement = fixture.debugElement.query(
+      By.css('.courses-page_no-data')
     );
-    expect(filteredCourseElements.length).toBe(
-      COURSES_LIST.filter((course) =>
-        course.name.toLowerCase().includes('angular')
-      ).length
-    );
+    expect(noDataElement).toBeTruthy();
   });
 });
