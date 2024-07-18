@@ -1,5 +1,3 @@
-import { Author } from './author';
-
 export interface Course {
   id: string;
   name: string;
@@ -15,4 +13,9 @@ export interface CoursesResponse {
   page: number | null;
   pageSize: number | null;
   totalLength: number;
+}
+
+export interface Author {
+  id: string;
+  name: string;
 }
