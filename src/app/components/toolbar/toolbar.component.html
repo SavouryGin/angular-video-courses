@@ -5,13 +5,16 @@
       placeholder="Search courses"
       [(ngModel)]="searchQuery"
       class="toolbar_input"
-      (keydown.enter)="handleSearch()"
+      (keyup)="onSearchInputChange(searchQuery)"
     />
-    <app-button
-      text="Search"
-      (onClick)="handleSearch()"
-      class="toolbar_search-button"
-    ></app-button>
+    <button
+      *ngIf="searchQuery"
+      class="toolbar_clear"
+      (click)="handleClearSearch()"
+      aria-label="Clear search"
+    >
+      &#x2715;
+    </button>
   </div>
   <app-button
     text="Add Course"
