@@ -33,11 +33,12 @@ describe('CourseTileComponent', () => {
     component = fixture.componentInstance;
     mockCourse = {
       id: '1',
-      title: 'Test Course',
+      name: 'Test Course',
       description: 'Test Description',
-      creationDate: new Date('2024-07-02'),
-      duration: 120,
-      topRated: true,
+      date: '2024-07-02',
+      length: 120,
+      isTopRated: true,
+      authors: [],
     };
     component.course = mockCourse;
     fixture.detectChanges();
@@ -51,7 +52,7 @@ describe('CourseTileComponent', () => {
     const titleElement: HTMLElement = fixture.debugElement.query(
       By.css('h2')
     ).nativeElement;
-    expect(titleElement.textContent).toContain(mockCourse.title.toUpperCase());
+    expect(titleElement.textContent).toContain(mockCourse.name.toUpperCase());
   });
 
   it('should display duration and creation date', () => {
@@ -73,7 +74,7 @@ describe('CourseTileComponent', () => {
   });
 
   it('should not display top-rated star if course is not top-rated', () => {
-    component.course.topRated = false;
+    component.course.isTopRated = false;
     fixture.detectChanges();
 
     const starElement = fixture.debugElement.query(By.css('svg'));
@@ -83,11 +84,12 @@ describe('CourseTileComponent', () => {
   it('should display the course title in uppercase', () => {
     const mockCourse = {
       id: '1',
-      title: 'Angular Course',
-      creationDate: new Date(),
-      duration: 120,
+      name: 'Angular Course',
+      date: '2024-07-02',
+      length: 120,
       description: 'Learn Angular',
-      topRated: true,
+      isTopRated: true,
+      authors: [],
     };
 
     component.course = mockCourse;

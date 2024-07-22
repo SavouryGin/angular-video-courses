@@ -1,71 +1,143 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
-import { Router } from '@angular/router';
-import { By } from '@angular/platform-browser';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
-import { ButtonComponent } from '../button/button.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { User } from '../../models/user';
 import { LogoComponent } from '../logo/logo.component';
-
-class MockRouter {
-  url = '/';
-  navigate = jasmine.createSpy('navigate');
-}
+import { ButtonComponent } from '../button/button.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  let authService: AuthenticationService;
-  let router: MockRouter;
+  let authServiceMock: jasmine.SpyObj<AuthenticationService>;
+  let routerMock: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
+    const authSpy = jasmine.createSpyObj('AuthenticationService', [
+      'getUserInfo',
+      'isAuthenticated',
+      'logout',
+    ]);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+
     await TestBed.configureTestingModule({
-      declarations: [HeaderComponent, ButtonComponent, LogoComponent],
+      declarations: [HeaderComponent, LogoComponent, ButtonComponent],
+      imports: [RouterTestingModule],
       providers: [
-        AuthenticationService,
-        { provide: Router, useClass: MockRouter },
+        { provide: AuthenticationService, useValue: authSpy },
+        { provide: Router, useValue: routerSpy },
       ],
     }).compileComponents();
+
+    authServiceMock = TestBed.inject(
+      AuthenticationService
+    ) as jasmine.SpyObj<AuthenticationService>;
+    routerMock = TestBed.inject(Router) as jasmine.SpyObj<Router>;
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-    authService = TestBed.inject(AuthenticationService);
-    router = TestBed.inject(Router) as any;
-    localStorage.clear();
-    fixture.detectChanges();
-  });
-
-  afterEach(() => {
-    localStorage.clear();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show user info if authenticated', () => {
-    authService.login('testUser', 'password');
-    fixture.detectChanges();
+  describe('ngOnInit', () => {
+    it('should call getUserInfo and set user$', () => {
+      const user: User = {
+        id: 1,
+        fakeToken: 'fake-jwt-token',
+        name: { first: 'John', last: 'Doe' },
+        email: 'john.doe@example.com',
+        password: 'password',
+      };
 
-    const userInfoElement = fixture.debugElement.query(
-      By.css('.header_user-info')
-    );
-    expect(userInfoElement).toBeTruthy();
-    expect(userInfoElement.nativeElement.textContent).toContain('testUser');
+      authServiceMock.getUserInfo.and.returnValue(of(user));
+
+      fixture.detectChanges();
+
+      component.user$.subscribe((u) => {
+        expect(u).toEqual(user);
+      });
+
+      expect(authServiceMock.getUserInfo).toHaveBeenCalled();
+    });
+
+    it('should handle error if getUserInfo fails', () => {
+      authServiceMock.getUserInfo.and.returnValue(
+        throwError('User not authenticated')
+      );
+
+      fixture.detectChanges();
+
+      component.user$.subscribe({
+        error: (err) => {
+          expect(err).toEqual('User not authenticated');
+        },
+      });
+
+      expect(authServiceMock.getUserInfo).toHaveBeenCalled();
+    });
   });
 
-  it('should not show user info if not authenticated', () => {
-    fixture.detectChanges();
+  describe('showUserInfo', () => {
+    it('should return true if the user is authenticated', () => {
+      authServiceMock.isAuthenticated.and.returnValue(true);
 
-    const userInfoElement = fixture.debugElement.query(
-      By.css('.header_user-info')
-    );
-    expect(userInfoElement).toBeNull();
+      expect(component.showUserInfo()).toBe(true);
+    });
+
+    it('should return false if the user is not authenticated', () => {
+      authServiceMock.isAuthenticated.and.returnValue(false);
+
+      expect(component.showUserInfo()).toBe(false);
+    });
   });
 
-  it('should return user info correctly', () => {
-    authService.login('testUser', 'password');
-    expect(component.getUserInfo()?.username).toBe('testUser');
+  describe('handleLogout', () => {
+    it('should call logout and navigate to login', () => {
+      component.handleLogout();
+
+      expect(authServiceMock.logout).toHaveBeenCalled();
+      expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
+    });
+  });
+
+  describe('template', () => {
+    it('should display user info if authenticated', () => {
+      const user: User = {
+        id: 1,
+        fakeToken: 'fake-jwt-token',
+        name: { first: 'John', last: 'Doe' },
+        email: 'john.doe@example.com',
+        password: 'password',
+      };
+
+      authServiceMock.getUserInfo.and.returnValue(of(user));
+      authServiceMock.isAuthenticated.and.returnValue(true);
+
+      fixture.detectChanges();
+
+      const userInfoElement = fixture.debugElement.query(
+        By.css('.header_user-info')
+      );
+      expect(userInfoElement.nativeElement.textContent.trim()).toBe(user.email);
+    });
+
+    it('should not display user info if not authenticated', () => {
+      authServiceMock.isAuthenticated.and.returnValue(false);
+
+      fixture.detectChanges();
+
+      const userInfoElement = fixture.debugElement.query(
+        By.css('.header_user-info')
+      );
+      expect(userInfoElement).toBeNull();
+    });
   });
 });

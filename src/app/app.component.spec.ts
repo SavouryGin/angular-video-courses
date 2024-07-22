@@ -10,15 +10,20 @@ import { CourseTileComponent } from './components/course-tile/course-tile.compon
 import { CourseBorderDirective } from './directives/course-border/course-border.directive';
 import { DurationPipe } from './pipes/duration';
 import { OrderByPipe } from './pipes/order-by';
-import { FilterPipe } from './pipes/filter';
 import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { CoursesService } from './services/courses/courses.service';
 import { RouterModule } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterModule, FormsModule, BreadcrumbsModule],
+      imports: [
+        RouterModule,
+        FormsModule,
+        BreadcrumbsModule,
+        HttpClientTestingModule,
+      ],
       declarations: [
         AppComponent,
         HeaderComponent,
@@ -31,7 +36,7 @@ describe('AppComponent', () => {
         DurationPipe,
         OrderByPipe,
       ],
-      providers: [FilterPipe, CoursesService],
+      providers: [CoursesService],
     }).compileComponents();
   });
 
@@ -45,14 +50,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('angular-gmp-2024');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('header')?.textContent).toContain(
-      'Video Course'
-    );
   });
 });

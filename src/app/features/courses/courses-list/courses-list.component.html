@@ -1,10 +1,10 @@
 <div class="courses-page">
   <app-toolbar (search)="onSearch($event)"></app-toolbar>
 
-  <ng-container *ngIf="filteredCourses.length; else noDataTemplate">
+  <ng-container *ngIf="courses.length; else noDataTemplate">
     <app-course-tile
       *ngFor="
-        let course of filteredCourses | orderBy : 'creationDate';
+        let course of courses | orderBy : 'date';
         trackBy: trackByCourseId;
         let first = first;
         let last = last;

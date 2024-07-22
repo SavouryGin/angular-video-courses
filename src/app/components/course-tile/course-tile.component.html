@@ -1,16 +1,15 @@
 <div
   class="course-tile"
   appCourseBorder
-  [creationDate]="course.creationDate"
   [freshBorderColor]="'lightgreen'"
   [upcomingBorderColor]="'cyan'"
-  [ngClass]="{ 'course-tile_top-rated': course.topRated }"
+  [ngClass]="{ 'course-tile_top-rated': course.isTopRated }"
 >
   <div class="course-tile_header">
     <h2>
-      {{ course.title | uppercase }}
+      {{ course.name | uppercase }}
       <svg
-        *ngIf="course.topRated"
+        *ngIf="course.isTopRated"
         width="16"
         height="16"
         viewBox="0 0 24 24"
@@ -24,10 +23,10 @@
       </svg>
     </h2>
     <div class="course-tile_info">
-      <p><strong>Duration:</strong> {{ course.duration | duration }}</p>
+      <p><strong>Duration:</strong> {{ course.length | duration }}</p>
       <p>
         <strong>Creation Date:</strong>
-        {{ course.creationDate | date : "MM/dd/yyyy" }}
+        {{ course.date | date : "MM/dd/yyyy" }}
       </p>
     </div>
   </div>
