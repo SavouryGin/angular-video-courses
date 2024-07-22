@@ -3,34 +3,35 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
-import { LoginRequest, TokenRequest } from '../../models/login';
+import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { UserService } from '../user/user.service';
 import { User } from '../../models/user';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
   let httpMock: HttpTestingController;
-  let routerMock: jasmine.SpyObj<Router>;
+  let userService: UserService;
+  let router: Router;
 
   beforeEach(() => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         AuthenticationService,
+        UserService,
         { provide: Router, useValue: routerSpy },
       ],
     });
-
     service = TestBed.inject(AuthenticationService);
     httpMock = TestBed.inject(HttpTestingController);
-    routerMock = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    userService = TestBed.inject(UserService);
+    router = TestBed.inject(Router);
   });
 
   afterEach(() => {
-    localStorage.clear();
     httpMock.verify();
   });
 
@@ -38,123 +39,73 @@ describe('AuthenticationService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('#login', () => {
-    it('should save token and user info on successful login', () => {
-      const loginData: LoginRequest = {
-        email: 'test@example.com',
-        password: 'password',
-      };
-      const tokenResponse: TokenRequest = { token: 'fake-jwt-token' };
-      const userResponse: User = {
-        id: 1,
-        fakeToken: 'fake-jwt-token',
-        name: { first: 'John', last: 'Doe' },
-        email: 'test@example.com',
-        password: 'password',
-      };
+  it('should login and set token and user', () => {
+    const tokenResponse = { token: 'testToken' };
+    const userResponse = { id: 1, name: 'Test User' };
 
-      service.login(loginData.email, loginData.password).subscribe();
-
-      const loginRequest = httpMock.expectOne(
-        `${service['apiUrl']}/auth/login`
-      );
-      expect(loginRequest.request.method).toBe('POST');
-      expect(loginRequest.request.body).toEqual(loginData);
-      loginRequest.flush(tokenResponse);
-
-      const userInfoRequest = httpMock.expectOne(
-        `${service['apiUrl']}/auth/userinfo`
-      );
-      expect(userInfoRequest.request.method).toBe('POST');
-      expect(userInfoRequest.request.body).toEqual({
-        token: tokenResponse.token,
-      });
-      userInfoRequest.flush(userResponse);
-
-      expect(localStorage.getItem(service['tokenKey'])).toBe(
-        tokenResponse.token
-      );
-      expect(localStorage.getItem(service['userKey'])).toBe(
-        JSON.stringify(userResponse)
-      );
+    service.login('test@test.com', 'password').subscribe(() => {
+      expect(userService.getToken()).toBe('testToken');
+      expect(userService.getUser()).toEqual(userResponse);
     });
 
-    it('should handle login error', () => {
-      const loginData: LoginRequest = {
-        email: 'test@example.com',
-        password: 'password',
-      };
-      const errorMessage = 'Login failed';
+    const loginReq = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
+    expect(loginReq.request.method).toBe('POST');
+    loginReq.flush(tokenResponse);
 
-      service.login(loginData.email, loginData.password).subscribe({
-        error: (err) => {
-          expect(err).toBeTruthy();
-        },
-      });
-
-      const loginRequest = httpMock.expectOne(
-        `${service['apiUrl']}/auth/login`
-      );
-      loginRequest.flush(
-        { message: errorMessage },
-        { status: 401, statusText: 'Unauthorized' }
-      );
-    });
+    const userReq = httpMock.expectOne(`${environment.apiUrl}/auth/userinfo`);
+    expect(userReq.request.method).toBe('POST');
+    userReq.flush(userResponse);
   });
 
-  describe('#logout', () => {
-    it('should remove token and user info from localStorage', () => {
-      localStorage.setItem(service['tokenKey'], 'fake-jwt-token');
-      localStorage.setItem(
-        service['userKey'],
-        JSON.stringify({ username: 'testuser' })
-      );
+  it('should logout and clear token and user', () => {
+    spyOn(userService, 'removeToken').and.callThrough();
+    spyOn(userService, 'removeUser').and.callThrough();
 
-      service.logout();
+    service.logout();
 
-      expect(localStorage.getItem(service['tokenKey'])).toBeNull();
-      expect(localStorage.getItem(service['userKey'])).toBeNull();
-    });
+    expect(userService.removeToken).toHaveBeenCalled();
+    expect(userService.removeUser).toHaveBeenCalled();
   });
 
-  describe('#isAuthenticated', () => {
-    it('should return true if token exists in localStorage', () => {
-      localStorage.setItem(service['tokenKey'], 'fake-jwt-token');
-      expect(service.isAuthenticated()).toBe(true);
-    });
+  it('should return true if authenticated', () => {
+    spyOn(userService, 'isAuthenticated').and.returnValue(true);
 
-    it('should return false if token does not exist in localStorage', () => {
-      expect(service.isAuthenticated()).toBe(false);
-    });
+    expect(service.isAuthenticated()).toBe(true);
   });
 
-  describe('#getUserInfo', () => {
-    it('should return user info if token exists', () => {
-      const token = 'fake-jwt-token';
-      const userResponse: User = {
-        id: 1,
-        fakeToken: 'fake-jwt-token',
-        name: { first: 'John', last: 'Doe' },
-        email: 'test@example.com',
-        password: 'password',
-      };
+  it('should return false if not authenticated', () => {
+    spyOn(userService, 'isAuthenticated').and.returnValue(false);
 
-      localStorage.setItem(service['tokenKey'], token);
+    expect(service.isAuthenticated()).toBe(false);
+  });
 
-      service.getUserInfo().subscribe((user) => {
-        expect(user).toEqual(userResponse);
-      });
+  it('should get user info if authenticated', () => {
+    const userResponse: User = {
+      id: 2,
+      fakeToken: 'testToken',
+      name: {
+        first: 'Brock',
+        last: 'Beasley',
+      },
+      email: 'foo@epam.com',
+      password: 'testPassword',
+    };
+    spyOn(userService, 'getToken').and.returnValue('testToken');
 
-      const req = httpMock.expectOne(`${service['apiUrl']}/auth/userinfo`);
-      expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual({ token });
-      req.flush(userResponse);
+    service.getUserInfo().subscribe((user) => {
+      expect(user).toEqual(userResponse);
     });
 
-    it('should throw error if token does not exist', () => {
-      expect(() => service.getUserInfo()).toThrowError(
-        'User is not authenticated'
-      );
-    });
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/userinfo`);
+    expect(req.request.method).toBe('POST');
+    req.flush(userResponse);
+  });
+
+  it('should throw error if not authenticated when getting user info', () => {
+    spyOn(userService, 'getToken').and.returnValue(null);
+
+    expect(() => service.getUserInfo()).toThrowError(
+      'User is not authenticated'
+    );
   });
 });

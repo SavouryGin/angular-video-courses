@@ -2,29 +2,28 @@ import { Injectable } from '@angular/core';
 import { LoginRequest, TokenRequest } from '../../models/login';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user';
-import { map, Observable, switchMap } from 'rxjs';
-import { Router } from '@angular/router';
+import { Observable, switchMap, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private readonly tokenKey = 'authToken';
-  private readonly userKey = 'authUser';
-  private readonly apiUrl = 'http://localhost:3004';
+  private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
-  login(login: string, password: string): Observable<void> {
+  login(login: string, password: string): Observable<User> {
     const loginData: LoginRequest = { email: login, password };
     return this.http
       .post<TokenRequest>(`${this.apiUrl}/auth/login`, loginData)
       .pipe(
         switchMap((response: TokenRequest) => {
-          localStorage.setItem(this.tokenKey, response.token);
+          this.userService.setToken(response.token);
           return this.getUserInfo().pipe(
-            map((user: User) => {
-              localStorage.setItem(this.userKey, JSON.stringify(user));
+            tap((user: User) => {
+              this.userService.setUser(user);
             })
           );
         })
@@ -32,16 +31,16 @@ export class AuthenticationService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.userKey);
+    this.userService.removeToken();
+    this.userService.removeUser();
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+    return this.userService.isAuthenticated();
   }
 
   getUserInfo(): Observable<User> {
-    const token = localStorage.getItem(this.tokenKey);
+    const token = this.userService.getToken();
     if (token) {
       return this.http.post<User>(`${this.apiUrl}/auth/userinfo`, { token });
     }
