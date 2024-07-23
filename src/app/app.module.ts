@@ -13,9 +13,16 @@ import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from './shared/strategies/custom-route-reuse-strategy';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './services/authentication/auth.interceptor';
+import { LoadingBlockComponent } from './components/loading-block/loading-block.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent, LogoComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    LogoComponent,
+    LoadingBlockComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
