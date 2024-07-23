@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoginRequest, TokenRequest } from '../../models/login';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user';
-import { Observable, switchMap, tap } from 'rxjs';
+import { Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../user/user.service';
 
@@ -37,6 +37,14 @@ export class AuthenticationService {
 
   isAuthenticated(): boolean {
     return this.userService.isAuthenticated();
+  }
+
+  isAuthenticatedObservable(): Observable<boolean> {
+    if (this.isAuthenticated()) {
+      return of(true);
+    } else {
+      return of(false);
+    }
   }
 
   getUserInfo(): Observable<User> {
