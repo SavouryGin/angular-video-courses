@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoginRequest, TokenRequest } from '../../models/login';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user';
-import { Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../user/user.service';
 
@@ -11,8 +11,17 @@ import { UserService } from '../user/user.service';
 })
 export class AuthenticationService {
   private readonly apiUrl = environment.apiUrl;
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) {
+    const token = this.userService.getToken();
+    if (token) {
+      this.getUserInfo().subscribe((user) =>
+        this.currentUserSubject.next(user)
+      );
+    }
+  }
 
   login(login: string, password: string): Observable<User> {
     const loginData: LoginRequest = { email: login, password };
@@ -24,6 +33,7 @@ export class AuthenticationService {
           return this.getUserInfo().pipe(
             tap((user: User) => {
               this.userService.setUser(user);
+              this.currentUserSubject.next(user);
             })
           );
         })
@@ -33,6 +43,7 @@ export class AuthenticationService {
   logout(): void {
     this.userService.removeToken();
     this.userService.removeUser();
+    this.currentUserSubject.next(null);
   }
 
   isAuthenticated(): boolean {
