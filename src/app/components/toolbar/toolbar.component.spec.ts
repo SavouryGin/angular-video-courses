@@ -108,16 +108,6 @@ describe('ToolbarComponent', () => {
     expect(component.search.emit).toHaveBeenCalledWith(initialCourses);
   }));
 
-  // it('should navigate to add course page on add course button click', () => {
-  //   const router = TestBed.inject(RouterTestingModule);
-  //   spyOn(router, 'navigate');
-
-  //   const addButton = fixture.debugElement.query(By.css('.toolbar_add-button'));
-  //   addButton.triggerEventHandler('click', null);
-
-  //   expect(router.navigate).toHaveBeenCalledWith(['/courses/new']);
-  // });
-
   it('should handle search errors gracefully', fakeAsync(() => {
     const consoleSpy = spyOn(console, 'error');
     coursesServiceSpy.getCourses.and.returnValue(
