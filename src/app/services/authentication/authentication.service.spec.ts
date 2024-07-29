@@ -4,45 +4,27 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { AuthenticationService } from './authentication.service';
-import { UserService } from '../user/user.service';
+import { environment } from '../../../environments/environment';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../store/auth/auth.actions';
 import { User } from '../../models/user';
-import { of } from 'rxjs';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
   let httpMock: HttpTestingController;
-  let userServiceSpy: jasmine.SpyObj<UserService>;
-
-  const mockUser: User = {
-    id: 1,
-    fakeToken: 'fakeToken',
-    name: { first: 'John', last: 'Doe' },
-    email: 'john.doe@example.com',
-    password: 'password',
-  };
+  let store: MockStore;
+  const initialState = {};
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('UserService', [
-      'getToken',
-      'setToken',
-      'removeToken',
-      'setUser',
-      'removeUser',
-      'getUser',
-      'isAuthenticated',
-    ]);
-
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        AuthenticationService,
-        { provide: UserService, useValue: spy },
-      ],
+      providers: [AuthenticationService, provideMockStore({ initialState })],
     });
 
     service = TestBed.inject(AuthenticationService);
     httpMock = TestBed.inject(HttpTestingController);
-    userServiceSpy = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
+    store = TestBed.inject(Store) as MockStore;
   });
 
   afterEach(() => {
@@ -53,50 +35,61 @@ describe('AuthenticationService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('logout', () => {
-    it('should clear the token and user from storage', () => {
-      userServiceSpy.removeToken.and.stub();
-      userServiceSpy.removeUser.and.stub();
+  it('should login and set token and user', () => {
+    const tokenResponse = { token: 'testToken' };
+    const userResponse = {
+      id: 1,
+      fakeToken: 'fakeToken',
+      name: { first: 'John', last: 'Doe' },
+      email: 'john.doe@example.com',
+      password: 'password',
+    };
 
-      service.logout();
+    spyOn(store, 'dispatch').and.callThrough();
 
-      expect(userServiceSpy.removeToken).toHaveBeenCalled();
-      expect(userServiceSpy.removeUser).toHaveBeenCalled();
-      expect(service['currentUserSubject'].value).toBeNull();
-    });
-  });
-
-  describe('isAuthenticated', () => {
-    it('should return true if token is present', () => {
-      userServiceSpy.isAuthenticated.and.returnValue(true);
-      expect(service.isAuthenticated()).toBeTrue();
-    });
-
-    it('should return false if token is not present', () => {
-      userServiceSpy.isAuthenticated.and.returnValue(false);
-      expect(service.isAuthenticated()).toBeFalse();
-    });
-  });
-
-  describe('getUserInfo', () => {
-    it('should return user information if token is present', () => {
-      userServiceSpy.getToken.and.returnValue('fakeToken');
-
-      service.getUserInfo().subscribe((user) => {
-        expect(user).toEqual(mockUser);
-      });
-
-      const req = httpMock.expectOne(`${service['apiUrl']}/auth/userinfo`);
-      expect(req.request.method).toBe('POST');
-      req.flush(mockUser);
-    });
-
-    it('should throw an error if token is not present', () => {
-      userServiceSpy.getToken.and.returnValue(null);
-
-      expect(() => service.getUserInfo()).toThrowError(
-        'User is not authenticated'
+    service.login('test@test.com', 'password').subscribe((user) => {
+      expect(user).toEqual(userResponse);
+      expect(store.dispatch).toHaveBeenCalledWith(
+        AuthActions.loginSuccess({ user: userResponse, token: 'testToken' })
       );
     });
+
+    const loginReq = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
+    expect(loginReq.request.method).toBe('POST');
+    loginReq.flush(tokenResponse);
+
+    const userReq = httpMock.expectOne(`${environment.apiUrl}/auth/userinfo`);
+    expect(userReq.request.method).toBe('POST');
+    userReq.flush(userResponse);
+  });
+
+  it('should logout and dispatch logout action', () => {
+    spyOn(store, 'dispatch').and.callThrough();
+
+    service.logout();
+
+    expect(store.dispatch).toHaveBeenCalledWith(AuthActions.logout());
+  });
+
+  it('should get user info', () => {
+    const token = 'testToken';
+    const userResponse: User = {
+      id: 2,
+      fakeToken: 'testToken',
+      name: {
+        first: 'Brock',
+        last: 'Beasley',
+      },
+      email: 'foo@epam.com',
+      password: 'testPassword',
+    };
+
+    service.getUserInfo(token).subscribe((user) => {
+      expect(user).toEqual(userResponse);
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/userinfo`);
+    expect(req.request.method).toBe('POST');
+    req.flush(userResponse);
   });
 });

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
 import { User } from '../../models/user';
+import { AppState } from '../../store/app.state';
+import { selectCurrentUser } from '../../store/auth/auth.selectors';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -13,16 +15,15 @@ export class HeaderComponent implements OnInit {
   user$!: Observable<User | null>;
 
   constructor(
-    public router: Router,
+    private store: Store<AppState>,
     private authService: AuthenticationService
   ) {}
 
   ngOnInit() {
-    this.user$ = this.authService.currentUser$;
+    this.user$ = this.store.pipe(select(selectCurrentUser));
   }
 
   handleLogout() {
     this.authService.logout();
-    this.router.navigate(['/login']);
   }
 }

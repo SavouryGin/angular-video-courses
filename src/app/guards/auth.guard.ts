@@ -1,15 +1,17 @@
+import { CanActivateFn, Router } from '@angular/router';
+import { Store, select } from '@ngrx/store';
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
-import { Router } from '@angular/router';
-import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
+import { AppState } from '../store/app.state';
+import { isAuthenticated } from '../store/auth/auth.selectors';
 
 export const authGuard: CanActivateFn = (): Observable<boolean> => {
-  const authService = inject(AuthenticationService);
+  const store = inject(Store<AppState>);
   const router = inject(Router);
 
-  return authService.isAuthenticatedObservable().pipe(
+  return store.pipe(
+    select(isAuthenticated),
     map((isAuthenticated) => {
       if (isAuthenticated) {
         return true;

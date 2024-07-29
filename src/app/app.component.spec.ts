@@ -15,6 +15,7 @@ import { CoursesService } from './services/courses/courses.service';
 import { RouterModule } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { LoadingBlockComponent } from './components/loading-block/loading-block.component';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -38,7 +39,7 @@ describe('AppComponent', () => {
         OrderByPipe,
         LoadingBlockComponent,
       ],
-      providers: [CoursesService],
+      providers: [CoursesService, provideMockStore({})],
     }).compileComponents();
   });
 

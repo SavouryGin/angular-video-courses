@@ -15,9 +15,11 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './services/authentication/auth.interceptor';
 import { LoadingBlockComponent } from './components/loading-block/loading-block.component';
 import { StoreModule } from '@ngrx/store';
-import { reducers } from './state/reducers';
+import { reducers } from './store/reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { AuthEffects } from './store/auth/auth.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import { environment } from '../environments/environment';
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode in production
     }),
+    EffectsModule.forRoot([AuthEffects]),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
