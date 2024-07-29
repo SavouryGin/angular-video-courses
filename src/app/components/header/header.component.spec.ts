@@ -3,7 +3,7 @@ import { HeaderComponent } from './header.component';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { User } from '../../models/user';
 import { LogoComponent } from '../logo/logo.component';
@@ -14,13 +14,18 @@ describe('HeaderComponent', () => {
   let fixture: ComponentFixture<HeaderComponent>;
   let authServiceMock: jasmine.SpyObj<AuthenticationService>;
   let routerMock: jasmine.SpyObj<Router>;
+  let currentUserSubject: BehaviorSubject<User | null>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj('AuthenticationService', [
-      'getUserInfo',
-      'isAuthenticated',
-      'logout',
-    ]);
+    currentUserSubject = new BehaviorSubject<User | null>(null);
+
+    const authSpy = jasmine.createSpyObj(
+      'AuthenticationService',
+      ['getUserInfo', 'isAuthenticated', 'logout'],
+      {
+        currentUser$: currentUserSubject.asObservable(),
+      }
+    );
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
@@ -41,6 +46,7 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -48,7 +54,7 @@ describe('HeaderComponent', () => {
   });
 
   describe('ngOnInit', () => {
-    it('should call getUserInfo and set user$', () => {
+    it('should set user$ from currentUser$', () => {
       const user: User = {
         id: 1,
         fakeToken: 'fake-jwt-token',
@@ -57,45 +63,12 @@ describe('HeaderComponent', () => {
         password: 'password',
       };
 
-      authServiceMock.getUserInfo.and.returnValue(of(user));
-
+      currentUserSubject.next(user);
       fixture.detectChanges();
 
       component.user$.subscribe((u) => {
         expect(u).toEqual(user);
       });
-
-      expect(authServiceMock.getUserInfo).toHaveBeenCalled();
-    });
-
-    it('should handle error if getUserInfo fails', () => {
-      authServiceMock.getUserInfo.and.returnValue(
-        throwError('User not authenticated')
-      );
-
-      fixture.detectChanges();
-
-      component.user$.subscribe({
-        error: (err) => {
-          expect(err).toEqual('User not authenticated');
-        },
-      });
-
-      expect(authServiceMock.getUserInfo).toHaveBeenCalled();
-    });
-  });
-
-  describe('showUserInfo', () => {
-    it('should return true if the user is authenticated', () => {
-      authServiceMock.isAuthenticated.and.returnValue(true);
-
-      expect(component.showUserInfo()).toBe(true);
-    });
-
-    it('should return false if the user is not authenticated', () => {
-      authServiceMock.isAuthenticated.and.returnValue(false);
-
-      expect(component.showUserInfo()).toBe(false);
     });
   });
 
@@ -118,9 +91,8 @@ describe('HeaderComponent', () => {
         password: 'password',
       };
 
-      authServiceMock.getUserInfo.and.returnValue(of(user));
+      currentUserSubject.next(user);
       authServiceMock.isAuthenticated.and.returnValue(true);
-
       fixture.detectChanges();
 
       const userInfoElement = fixture.debugElement.query(

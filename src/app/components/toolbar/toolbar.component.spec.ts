@@ -1,56 +1,48 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { ToolbarComponent } from './toolbar.component';
-import { Router } from '@angular/router';
-import { By } from '@angular/platform-browser';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
+import { CoursesService } from '../../services/courses/courses.service';
+import { of, throwError } from 'rxjs';
+import { Course } from '../../models/course';
+import { By } from '@angular/platform-browser';
 import { ButtonComponent } from '../button/button.component';
+import { Router, RouterModule } from '@angular/router';
 
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
   let fixture: ComponentFixture<ToolbarComponent>;
+  let coursesServiceSpy: jasmine.SpyObj<CoursesService>;
   let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
+    coursesServiceSpy = jasmine.createSpyObj('CoursesService', ['getCourses']);
     const routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
       declarations: [ToolbarComponent, ButtonComponent],
-      imports: [FormsModule],
-      providers: [{ provide: Router, useValue: routerMock }],
+      imports: [HttpClientTestingModule, RouterModule, FormsModule],
+      providers: [
+        { provide: CoursesService, useValue: coursesServiceSpy },
+        { provide: Router, useValue: routerMock },
+      ],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(ToolbarComponent);
     component = fixture.componentInstance;
-    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     fixture.detectChanges();
+    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should emit search query when search button is clicked', () => {
-    spyOn(component.search, 'emit');
-    component.searchQuery = 'Test Search';
-    fixture.detectChanges();
-
-    const searchButton = fixture.debugElement.query(
-      By.css('.toolbar_search-button')
-    );
-    searchButton.triggerEventHandler('onClick', null);
-
-    expect(component.search.emit).toHaveBeenCalledWith('Test Search');
-  });
-
-  it('should emit search query when enter key is pressed in the input', () => {
-    spyOn(component.search, 'emit');
-    component.searchQuery = 'Test Search';
-    fixture.detectChanges();
-
-    const input = fixture.debugElement.query(By.css('.toolbar_input'));
-    input.triggerEventHandler('keydown.enter', new Event('keydown'));
-
-    expect(component.search.emit).toHaveBeenCalledWith('Test Search');
   });
 
   it('should navigate to add course page when add course button is clicked', () => {
@@ -62,13 +54,73 @@ describe('ToolbarComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/courses/new']);
   });
 
-  it('should bind input value to searchQuery property', async () => {
-    const input = fixture.nativeElement.querySelector('.toolbar_input');
-    input.value = 'Test Search';
-    input.dispatchEvent(new Event('input'));
+  it('should emit search results on search input change', fakeAsync(() => {
+    const searchResults: Course[] = [
+      { id: '1', name: 'Test Course' } as Course,
+    ];
+    coursesServiceSpy.getCourses.and.returnValue(
+      of({ content: searchResults, totalLength: 1, page: 0, pageSize: 5 })
+    );
 
-    await fixture.whenStable();
+    const searchQuery = 'Test';
+    spyOn(component.search, 'emit');
 
-    expect(component.searchQuery).toBe('Test Search');
-  });
+    component.onSearchInputChange(searchQuery);
+    tick(300); // debounce time
+
+    expect(coursesServiceSpy.getCourses).toHaveBeenCalledWith(
+      0,
+      5,
+      searchQuery
+    );
+    expect(component.search.emit).toHaveBeenCalledWith(searchResults);
+  }));
+
+  it('should not call API for search input shorter than 3 characters', fakeAsync(() => {
+    const searchQuery = 'Te';
+    component.onSearchInputChange(searchQuery);
+    tick(300); // debounce time
+
+    expect(coursesServiceSpy.getCourses).not.toHaveBeenCalled();
+  }));
+
+  it('should clear search query and emit initial course list on clear', fakeAsync(() => {
+    const initialCourses: Course[] = [
+      { id: '1', name: 'Initial Course' } as Course,
+    ];
+    coursesServiceSpy.getCourses.and.returnValue(
+      of({ content: initialCourses, totalLength: 1, page: 0, pageSize: 5 })
+    );
+
+    component.searchQuery = 'Test';
+    fixture.detectChanges();
+
+    const clearButton = fixture.debugElement.query(By.css('.toolbar_clear'));
+    expect(clearButton).toBeTruthy();
+
+    spyOn(component.search, 'emit');
+
+    clearButton.triggerEventHandler('click', null);
+    tick(300);
+
+    expect(component.searchQuery).toBe('');
+    expect(coursesServiceSpy.getCourses).toHaveBeenCalledWith(0, 5, '');
+    expect(component.search.emit).toHaveBeenCalledWith(initialCourses);
+  }));
+
+  it('should handle search errors gracefully', fakeAsync(() => {
+    const consoleSpy = spyOn(console, 'error');
+    coursesServiceSpy.getCourses.and.returnValue(
+      throwError(() => new Error('Search error'))
+    );
+
+    const searchQuery = 'Test';
+    component.onSearchInputChange(searchQuery);
+    tick(300); // debounce time
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Search error:',
+      jasmine.any(Error)
+    );
+  }));
 });

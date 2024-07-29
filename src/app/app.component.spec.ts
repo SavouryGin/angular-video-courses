@@ -14,6 +14,7 @@ import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { CoursesService } from './services/courses/courses.service';
 import { RouterModule } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { LoadingBlockComponent } from './components/loading-block/loading-block.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -35,6 +36,7 @@ describe('AppComponent', () => {
         CourseBorderDirective,
         DurationPipe,
         OrderByPipe,
+        LoadingBlockComponent,
       ],
       providers: [CoursesService],
     }).compileComponents();

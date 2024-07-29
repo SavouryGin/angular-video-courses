@@ -1,8 +1,8 @@
 <header class="header">
   <app-logo></app-logo>
-  <div class="header_user-actions" *ngIf="showUserInfo()">
+  <div class="header_user-actions" *ngIf="user$ | async as user">
     <span class="header_user-info">
-      {{ (user$ | async)?.email }}
+      {{ user.email }}
     </span>
     <app-button
       text="Log out"

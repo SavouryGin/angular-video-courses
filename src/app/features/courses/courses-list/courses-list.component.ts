@@ -36,9 +36,10 @@ export class CoursesListComponent implements OnInit {
     });
   }
 
-  onSearch(query: string) {
-    this.searchQuery = query;
-    this.resetCourses();
+  onSearch(results: Course[]) {
+    this.courses = results;
+    this.currentPage = 0;
+    this.totalCourses = results.length;
   }
 
   onCourseDelete(courseId: string) {

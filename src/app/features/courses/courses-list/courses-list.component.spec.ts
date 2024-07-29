@@ -72,15 +72,6 @@ describe('CoursesListComponent', () => {
     expect(component.errorMessage).toBe('Failed to load courses');
   });
 
-  it('should reset courses and search', () => {
-    spyOn(coursesService, 'getCourses').and.returnValue(
-      of(mockCoursesResponse)
-    );
-    component.onSearch('Course');
-    expect(coursesService.getCourses).toHaveBeenCalledWith(0, 5, 'Course');
-    expect(component.courses.length).toBe(2);
-  });
-
   it('should display "No Data" when courses list is empty', () => {
     component.courses = [];
     fixture.detectChanges();
