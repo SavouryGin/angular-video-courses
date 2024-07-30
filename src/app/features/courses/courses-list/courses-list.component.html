@@ -1,7 +1,18 @@
 <div class="courses-page">
   <app-toolbar (search)="onSearch($event)"></app-toolbar>
 
-  <ng-container *ngIf="courses.length; else noDataTemplate">
+  <!-- Show loading indicator -->
+  <ng-container *ngIf="loading$ | async">
+    <p class="courses-page_loading">Loading...</p>
+  </ng-container>
+
+  <!-- Show error message if any -->
+  <ng-container *ngIf="error$ | async as errorMessage">
+    <p class="courses-page_error">{{ errorMessage }}</p>
+  </ng-container>
+
+  <!-- Show courses list or no data template -->
+  <ng-container *ngIf="courses$ | async as courses; else noDataTemplate">
     <app-course-tile
       *ngFor="
         let course of courses | orderBy : 'date';
@@ -26,6 +37,7 @@
     ></app-button>
   </ng-container>
 
+  <!-- Template for no data -->
   <ng-template #noDataTemplate>
     <p class="courses-page_no-data">No Data</p>
   </ng-template>

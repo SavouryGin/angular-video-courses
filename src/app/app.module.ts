@@ -20,6 +20,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { AuthEffects } from './store/auth/auth.effects';
 import { EffectsModule } from '@ngrx/effects';
+import { CoursesEffects } from './store/courses/courses.effects';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { EffectsModule } from '@ngrx/effects';
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode in production
     }),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, CoursesEffects]),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },

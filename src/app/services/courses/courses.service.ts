@@ -4,6 +4,9 @@ import { finalize, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { LoadingService } from '../loading/loading.service';
 import { environment } from '../../../environments/environment';
+import { Store } from '@ngrx/store';
+import * as CoursesActions from '../../store/courses/courses.actions';
+import { AppState } from '../../store/app.state';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +16,21 @@ export class CoursesService {
 
   constructor(
     private http: HttpClient,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private store: Store<AppState>
   ) {}
 
-  getCourses(
+  loadCourses(
+    start: number = 0,
+    count: number = 5,
+    textFragment?: string
+  ): void {
+    this.store.dispatch(
+      CoursesActions.loadCourses({ start, count, query: textFragment || '' })
+    );
+  }
+
+  fetchCourses(
     start: number = 0,
     count: number = 5,
     textFragment?: string
