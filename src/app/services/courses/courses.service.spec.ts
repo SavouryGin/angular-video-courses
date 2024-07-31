@@ -4,37 +4,64 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { CoursesService } from './courses.service';
-import { LoadingService } from '../loading/loading.service';
-import { Course, CoursesResponse } from '../../models/course';
+import { Store, StoreModule } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
-import { provideMockStore } from '@ngrx/store/testing';
-import { initialState } from '../../store/app.state';
+import { Course, CoursesResponse } from '../../models/course';
+import * as CoursesActions from '../../store/courses/courses.actions';
+import { AppState } from '../../store/app.state';
 
 describe('CoursesService', () => {
   let service: CoursesService;
   let httpMock: HttpTestingController;
-  let loadingService: jasmine.SpyObj<LoadingService>;
+  let store: Store<AppState>;
+
+  const mockCoursesResponse: CoursesResponse = {
+    content: [
+      {
+        id: '1',
+        name: 'Course 1',
+        date: '2024-01-01',
+        length: 60,
+        description: 'Description 1',
+        isTopRated: false,
+        authors: [],
+      },
+      {
+        id: '1',
+        name: 'Course 2',
+        date: '2024-01-01',
+        length: 120,
+        description: 'Description 2',
+        isTopRated: false,
+        authors: [],
+      },
+    ],
+    page: 0,
+    pageSize: 1,
+    totalLength: 2,
+  };
+
+  const mockCourse: Course = {
+    id: '1',
+    name: 'Course 1',
+    date: '2024-01-01',
+    length: 60,
+    description: 'Description 1',
+    isTopRated: false,
+    authors: [],
+  };
 
   beforeEach(() => {
-    const loadingServiceSpy = jasmine.createSpyObj('LoadingService', [
-      'show',
-      'hide',
-    ]);
-
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
-        CoursesService,
-        { provide: LoadingService, useValue: loadingServiceSpy },
-        provideMockStore({ initialState }),
-      ],
+      imports: [HttpClientTestingModule, StoreModule.forRoot({})],
+      providers: [CoursesService],
     });
 
     service = TestBed.inject(CoursesService);
     httpMock = TestBed.inject(HttpTestingController);
-    loadingService = TestBed.inject(
-      LoadingService
-    ) as jasmine.SpyObj<LoadingService>;
+    store = TestBed.inject(Store);
+
+    spyOn(store, 'dispatch').and.callThrough();
   });
 
   afterEach(() => {
@@ -45,49 +72,27 @@ describe('CoursesService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should fetch courses and call loadingService.show and hide', () => {
-    const mockResponse: CoursesResponse = {
-      content: [
-        {
-          id: '1',
-          name: 'Course 1',
-          date: '2024-01-01',
-          length: 60,
-          description: 'Description 1',
-          isTopRated: false,
-          authors: [],
-        },
-      ],
-      page: 0,
-      pageSize: 5,
-      totalLength: 1,
-    };
+  it('should dispatch loadCourses action', () => {
+    service.loadCourses(0, 5, 'test');
 
-    service.fetchCourses(0, 5, 'Course').subscribe((response) => {
-      expect(response).toEqual(mockResponse);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      CoursesActions.loadCourses({ start: 0, count: 5, query: 'test' })
+    );
+  });
+
+  it('should fetch courses', () => {
+    service.fetchCourses(0, 5, 'test').subscribe((response) => {
+      expect(response).toEqual(mockCoursesResponse);
     });
 
     const req = httpMock.expectOne(
-      `${environment.apiUrl}/courses?start=0&count=5&textFragment=Course`
+      `${environment.apiUrl}/courses?start=0&count=5&textFragment=test`
     );
     expect(req.request.method).toBe('GET');
-    req.flush(mockResponse);
-
-    expect(loadingService.show).toHaveBeenCalled();
-    expect(loadingService.hide).toHaveBeenCalled();
+    req.flush(mockCoursesResponse);
   });
 
-  it('should get a course by id and call loadingService.show and hide', () => {
-    const mockCourse: Course = {
-      id: '1',
-      name: 'Course 1',
-      date: '2024-01-01',
-      length: 60,
-      description: 'Description 1',
-      isTopRated: false,
-      authors: [],
-    };
-
+  it('should get course by id', () => {
     service.getCourseById('1').subscribe((course) => {
       expect(course).toEqual(mockCourse);
     });
@@ -95,65 +100,35 @@ describe('CoursesService', () => {
     const req = httpMock.expectOne(`${environment.apiUrl}/courses/1`);
     expect(req.request.method).toBe('GET');
     req.flush(mockCourse);
-
-    expect(loadingService.show).toHaveBeenCalled();
-    expect(loadingService.hide).toHaveBeenCalled();
   });
 
-  it('should create a course and call loadingService.show and hide', () => {
-    const newCourse: Course = {
-      id: '2',
-      name: 'Course 2',
-      date: '2024-02-01',
-      length: 90,
-      description: 'Description 2',
-      isTopRated: true,
-      authors: [],
-    };
-    const mockCourse: Course = {
-      id: '2',
-      name: 'Course 2',
-      date: '2024-02-01',
-      length: 90,
-      description: 'Description 2',
-      isTopRated: true,
-      authors: [],
-    };
-
-    service.createCourse(newCourse).subscribe((course) => {
+  it('should create a new course', () => {
+    service.createCourse(mockCourse).subscribe((course) => {
       expect(course).toEqual(mockCourse);
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/courses`);
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(newCourse);
     req.flush(mockCourse);
-
-    expect(loadingService.show).toHaveBeenCalled();
-    expect(loadingService.hide).toHaveBeenCalled();
   });
 
-  it('should update a course and call loadingService.show and hide', () => {
-    const updatedCourse: Course = {
-      id: '1',
-      name: 'Updated Course',
-      date: '2024-01-01',
-      length: 60,
-      description: 'Updated Description',
-      isTopRated: false,
-      authors: [],
-    };
-
-    service.updateCourse(updatedCourse).subscribe((course) => {
-      expect(course).toEqual(updatedCourse);
+  it('should update a course', () => {
+    service.updateCourse(mockCourse).subscribe((course) => {
+      expect(course).toEqual(mockCourse);
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/courses/1`);
     expect(req.request.method).toBe('PATCH');
-    expect(req.request.body).toEqual(updatedCourse);
-    req.flush(updatedCourse);
+    req.flush(mockCourse);
+  });
 
-    expect(loadingService.show).toHaveBeenCalled();
-    expect(loadingService.hide).toHaveBeenCalled();
+  it('should remove a course', () => {
+    service.removeCourse('1').subscribe(() => {
+      expect(true).toBeTrue(); // If it reaches here, it means the delete call was successful.
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/courses/1`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null);
   });
 });

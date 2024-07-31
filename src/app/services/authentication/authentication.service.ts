@@ -23,7 +23,6 @@ export class AuthenticationService {
 
   login(login: string, password: string): Observable<User> {
     const loginData: LoginRequest = { email: login, password };
-    console.log('loginData', loginData);
     return this.http
       .post<TokenRequest>(`${this.apiUrl}/auth/login`, loginData)
       .pipe(
