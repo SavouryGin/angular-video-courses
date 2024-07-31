@@ -7,7 +7,7 @@ import { CoursesService } from './courses.service';
 import { LoadingService } from '../loading/loading.service';
 import { Course, CoursesResponse } from '../../models/course';
 import { environment } from '../../../environments/environment';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { initialState } from '../../store/app.state';
 
 describe('CoursesService', () => {

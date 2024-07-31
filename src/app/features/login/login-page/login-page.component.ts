@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import { AppState } from '../../../store/app.state';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../store/auth/auth.actions';
 
 @Component({
   selector: 'app-login-page',
@@ -12,22 +13,12 @@ export class LoginPageComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(
-    private authService: AuthenticationService,
-    private router: Router
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   handleLogin() {
     this.errorMessage = ''; // Clear any previous error message
-    this.authService.login(this.email, this.password).subscribe({
-      next: () => {
-        this.router.navigate(['/courses']);
-      },
-      error: (err) => {
-        console.error('Login failed', err);
-        this.errorMessage =
-          'Login failed. Please check your credentials and try again.';
-      },
-    });
+    this.store.dispatch(
+      AuthActions.login({ email: this.email, password: this.password })
+    );
   }
 }

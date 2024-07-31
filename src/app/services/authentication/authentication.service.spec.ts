@@ -50,7 +50,7 @@ describe('AuthenticationService', () => {
     service.login('test@test.com', 'password').subscribe((user) => {
       expect(user).toEqual(userResponse);
       expect(store.dispatch).toHaveBeenCalledWith(
-        AuthActions.loginSuccess({ user: userResponse, token: 'testToken' })
+        AuthActions.loginSuccess({ user: userResponse })
       );
     });
 

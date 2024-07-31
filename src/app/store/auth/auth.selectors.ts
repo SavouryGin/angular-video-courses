@@ -10,8 +10,3 @@ export const selectCurrentUser = createSelector(
   selectAuthState,
   (state: AuthState) => state.user
 );
-
-export const isAuthenticated = createSelector(
-  selectAuthState,
-  (state: AuthState) => !!state.user
-);

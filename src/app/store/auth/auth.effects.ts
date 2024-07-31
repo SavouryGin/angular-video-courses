@@ -19,10 +19,11 @@ export class AuthEffects {
       ofType(AuthActions.login),
       mergeMap((action) =>
         this.authService.login(action.email, action.password).pipe(
-          map((user) =>
-            AuthActions.loginSuccess({ user, token: user.fakeToken })
-          ),
-          catchError((error) => of(AuthActions.loginFailure({ error })))
+          map((user) => AuthActions.loginSuccess({ user })),
+          tap(() => this.router.navigate(['/courses'])),
+          catchError((error) =>
+            of(AuthActions.loginFailure({ error: error.message }))
+          )
         )
       )
     )
