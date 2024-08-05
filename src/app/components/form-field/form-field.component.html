@@ -1,0 +1,32 @@
+<div class="form-field">
+  <label [for]="name">{{ label }}</label>
+  <ng-container [ngSwitch]="type">
+    <input
+      *ngSwitchCase="'text'"
+      [type]="type"
+      [formControl]="control"
+      [attr.maxLength]="maxLength"
+      [required]="required"
+      [id]="name"
+    />
+    <input
+      *ngSwitchCase="'number'"
+      [type]="type"
+      [formControl]="control"
+      [required]="required"
+      [id]="name"
+    />
+    <textarea
+      *ngSwitchCase="'textarea'"
+      [formControl]="control"
+      [attr.maxLength]="maxLength"
+      [required]="required"
+      [id]="name"
+    ></textarea>
+  </ng-container>
+  <div *ngIf="control.invalid && control.touched" class="error-messages">
+    <span *ngIf="control.errors?.['required']">This field is required.</span>
+    <span *ngIf="control.errors?.['maxlength']">Maximum length exceeded.</span>
+    <span *ngIf="control.errors?.['pattern']">Only numbers are allowed.</span>
+  </div>
+</div>

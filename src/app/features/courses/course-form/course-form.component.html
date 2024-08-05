@@ -1,38 +1,29 @@
 <div class="course-form">
   <h2>{{ isEditMode ? "Edit Course" : "Add New Course" }}</h2>
-  <form>
-    <app-text-input
+  <form [formGroup]="courseForm">
+    <app-form-text-input
       label="Title"
-      [(value)]="title"
       name="title"
-      placeholder="Enter course title"
-      id="course-form-title"
-    ></app-text-input>
+      formControlName="title"
+    ></app-form-text-input>
 
-    <app-text-area
+    <app-form-text-area
       label="Description"
-      [(value)]="description"
       name="description"
-      placeholder="Enter course description"
-      id="course-form-description"
-    ></app-text-area>
+      formControlName="description"
+    ></app-form-text-area>
 
-    <app-text-input
+    <app-form-date-input
       label="Date"
-      [(value)]="date"
       name="date"
-      placeholder="Enter course date"
-      id="course-form-date"
-    ></app-text-input>
+      formControlName="date"
+    ></app-form-date-input>
 
-    <app-numeric-input
+    <app-form-numeric-input
       label="Duration (minutes)"
-      [(value)]="duration"
       name="duration"
-      placeholder="0"
-      id="course-form-duration"
-      min="0"
-    ></app-numeric-input>
+      formControlName="duration"
+    ></app-form-numeric-input>
 
     <div class="buttons">
       <app-button
@@ -44,6 +35,7 @@
         text="Save"
         (onClick)="handleSave()"
         class="save-button"
+        [disabled]="courseForm.invalid"
       ></app-button>
     </div>
   </form>
