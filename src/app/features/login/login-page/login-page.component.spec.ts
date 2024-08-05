@@ -1,43 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { of } from 'rxjs';
 import { LoginPageComponent } from './login-page.component';
-import { AuthenticationService } from '../../../services/authentication/authentication.service';
-import { SharedModule } from '../../../shared/shared.module';
-
-class MockAuthenticationService {
-  login(email: string, password: string) {
-    return of(true);
-  }
-}
-
-class MockRouter {
-  navigate(path: string[]) {}
-}
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import * as AuthActions from '../../../store/auth/auth.actions';
+import { AppState } from '../../../store/app.state';
+import { DebugElement } from '@angular/core';
+import { ButtonComponent } from '../../../components/button/button.component';
 
 describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
   let fixture: ComponentFixture<LoginPageComponent>;
-  let authService: AuthenticationService;
-  let router: Router;
+  let store: MockStore<AppState>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoginPageComponent],
-      imports: [FormsModule, SharedModule],
-      providers: [
-        { provide: AuthenticationService, useClass: MockAuthenticationService },
-        { provide: Router, useClass: MockRouter },
-      ],
+      declarations: [LoginPageComponent, ButtonComponent],
+      imports: [FormsModule],
+      providers: [provideMockStore()],
     }).compileComponents();
+
+    store = TestBed.inject(MockStore);
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginPageComponent);
     component = fixture.componentInstance;
-    authService = TestBed.inject(AuthenticationService);
-    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
@@ -45,34 +33,20 @@ describe('LoginPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call authService.login when handleLogin is called', () => {
-    spyOn(authService, 'login').and.callThrough();
-    component.email = 'test@example.com';
-    component.password = 'password123';
+  it('should dispatch login action with email and password on handleLogin', () => {
+    const email = 'test@example.com';
+    const password = 'password123';
+    component.email = email;
+    component.password = password;
+
+    spyOn(store, 'dispatch');
+
     component.handleLogin();
-    expect(authService.login).toHaveBeenCalledWith(
-      'test@example.com',
-      'password123'
+
+    expect(component.errorMessage).toBe('');
+    expect(store.dispatch).toHaveBeenCalledWith(
+      AuthActions.login({ email, password })
     );
-  });
-
-  it('should navigate to /courses after successful login', () => {
-    spyOn(router, 'navigate');
-    component.handleLogin();
-    expect(router.navigate).toHaveBeenCalledWith(['/courses']);
-  });
-
-  it('should bind email and password inputs to component properties', () => {
-    const emailInput = fixture.nativeElement.querySelector('#email');
-    const passwordInput = fixture.nativeElement.querySelector('#password');
-
-    emailInput.value = 'test@example.com';
-    emailInput.dispatchEvent(new Event('input'));
-    passwordInput.value = 'password123';
-    passwordInput.dispatchEvent(new Event('input'));
-
-    expect(component.email).toBe('test@example.com');
-    expect(component.password).toBe('password123');
   });
 
   it('should disable login button if email or password is empty', () => {
@@ -88,5 +62,16 @@ describe('LoginPageComponent', () => {
     component.password = 'password123';
     fixture.detectChanges();
     expect(loginButton.disabled).toBeFalsy();
+  });
+
+  it('should display error message when errorMessage is set', () => {
+    const errorMessage = 'Invalid login credentials';
+    component.errorMessage = errorMessage;
+    fixture.detectChanges();
+
+    const errorElement: DebugElement = fixture.debugElement.query(
+      By.css('.login-container_error-message')
+    );
+    expect(errorElement.nativeElement.textContent).toContain(errorMessage);
   });
 });

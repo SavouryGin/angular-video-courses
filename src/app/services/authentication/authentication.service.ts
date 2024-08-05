@@ -2,26 +2,24 @@ import { Injectable } from '@angular/core';
 import { LoginRequest, TokenRequest } from '../../models/login';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user';
-import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
+import { Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { UserService } from '../user/user.service';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../store/auth/auth.actions';
+import { AppState } from '../../store/app.state';
+import { TokenService } from '../token/token.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
   private readonly apiUrl = environment.apiUrl;
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private userService: UserService) {
-    const token = this.userService.getToken();
-    if (token) {
-      this.getUserInfo().subscribe((user) =>
-        this.currentUserSubject.next(user)
-      );
-    }
-  }
+  constructor(
+    private http: HttpClient,
+    private store: Store<AppState>,
+    private tokenService: TokenService
+  ) {}
 
   login(login: string, password: string): Observable<User> {
     const loginData: LoginRequest = { email: login, password };
@@ -29,11 +27,10 @@ export class AuthenticationService {
       .post<TokenRequest>(`${this.apiUrl}/auth/login`, loginData)
       .pipe(
         switchMap((response: TokenRequest) => {
-          this.userService.setToken(response.token);
-          return this.getUserInfo().pipe(
+          this.tokenService.setToken(response.token);
+          return this.getUserInfo(response.token).pipe(
             tap((user: User) => {
-              this.userService.setUser(user);
-              this.currentUserSubject.next(user);
+              this.store.dispatch(AuthActions.loginSuccess({ user }));
             })
           );
         })
@@ -41,13 +38,16 @@ export class AuthenticationService {
   }
 
   logout(): void {
-    this.userService.removeToken();
-    this.userService.removeUser();
-    this.currentUserSubject.next(null);
+    this.tokenService.removeToken();
+    this.store.dispatch(AuthActions.logout());
+  }
+
+  getUserInfo(token: string): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/auth/userinfo`, { token });
   }
 
   isAuthenticated(): boolean {
-    return this.userService.isAuthenticated();
+    return this.tokenService.isAuthenticated();
   }
 
   isAuthenticatedObservable(): Observable<boolean> {
@@ -56,13 +56,5 @@ export class AuthenticationService {
     } else {
       return of(false);
     }
-  }
-
-  getUserInfo(): Observable<User> {
-    const token = this.userService.getToken();
-    if (token) {
-      return this.http.post<User>(`${this.apiUrl}/auth/userinfo`, { token });
-    }
-    throw new Error('User is not authenticated');
   }
 }

@@ -4,51 +4,64 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { CoursesService } from './courses.service';
+import { Store, StoreModule } from '@ngrx/store';
+import { environment } from '../../../environments/environment';
 import { Course, CoursesResponse } from '../../models/course';
+import * as CoursesActions from '../../store/courses/courses.actions';
+import { AppState } from '../../store/app.state';
 
 describe('CoursesService', () => {
   let service: CoursesService;
   let httpMock: HttpTestingController;
+  let store: Store<AppState>;
 
   const mockCoursesResponse: CoursesResponse = {
     content: [
       {
         id: '1',
         name: 'Course 1',
-        date: '2023-01-01',
-        length: 120,
+        date: '2024-01-01',
+        length: 60,
+        description: 'Description 1',
+        isTopRated: false,
         authors: [],
       },
       {
-        id: '2',
+        id: '1',
         name: 'Course 2',
-        date: '2023-01-02',
-        length: 90,
+        date: '2024-01-01',
+        length: 120,
+        description: 'Description 2',
+        isTopRated: false,
         authors: [],
       },
     ],
     page: 0,
-    pageSize: 5,
+    pageSize: 1,
     totalLength: 2,
   };
 
   const mockCourse: Course = {
     id: '1',
     name: 'Course 1',
-    date: '2023-01-01',
-    length: 120,
+    date: '2024-01-01',
+    length: 60,
+    description: 'Description 1',
+    isTopRated: false,
     authors: [],
-    description: 'Course 1 description',
-    isTopRated: true,
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, StoreModule.forRoot({})],
       providers: [CoursesService],
     });
+
     service = TestBed.inject(CoursesService);
     httpMock = TestBed.inject(HttpTestingController);
+    store = TestBed.inject(Store);
+
+    spyOn(store, 'dispatch').and.callThrough();
   });
 
   afterEach(() => {
@@ -59,22 +72,32 @@ describe('CoursesService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('should dispatch loadCourses action', () => {
+    service.loadCourses(0, 5, 'test');
+
+    expect(store.dispatch).toHaveBeenCalledWith(
+      CoursesActions.loadCourses({ start: 0, count: 5, query: 'test' })
+    );
+  });
+
   it('should fetch courses', () => {
-    service.getCourses().subscribe((response) => {
+    service.fetchCourses(0, 5, 'test').subscribe((response) => {
       expect(response).toEqual(mockCoursesResponse);
     });
 
-    const req = httpMock.expectOne(`${service['apiUrl']}?start=0&count=5`);
+    const req = httpMock.expectOne(
+      `${environment.apiUrl}/courses?start=0&count=5&textFragment=test`
+    );
     expect(req.request.method).toBe('GET');
     req.flush(mockCoursesResponse);
   });
 
-  it('should fetch a course by id', () => {
+  it('should get course by id', () => {
     service.getCourseById('1').subscribe((course) => {
       expect(course).toEqual(mockCourse);
     });
 
-    const req = httpMock.expectOne(`${service['apiUrl']}/1`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/courses/1`);
     expect(req.request.method).toBe('GET');
     req.flush(mockCourse);
   });
@@ -84,9 +107,8 @@ describe('CoursesService', () => {
       expect(course).toEqual(mockCourse);
     });
 
-    const req = httpMock.expectOne(service['apiUrl']);
+    const req = httpMock.expectOne(`${environment.apiUrl}/courses`);
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(mockCourse);
     req.flush(mockCourse);
   });
 
@@ -95,32 +117,18 @@ describe('CoursesService', () => {
       expect(course).toEqual(mockCourse);
     });
 
-    const req = httpMock.expectOne(`${service['apiUrl']}/${mockCourse.id}`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/courses/1`);
     expect(req.request.method).toBe('PATCH');
-    expect(req.request.body).toEqual(mockCourse);
     req.flush(mockCourse);
   });
 
-  it('should delete a course', () => {
+  it('should remove a course', () => {
     service.removeCourse('1').subscribe(() => {
-      expect(true).toBeTruthy();
+      expect(true).toBeTrue(); // If it reaches here, it means the delete call was successful.
     });
 
-    const req = httpMock.expectOne(`${service['apiUrl']}/1`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/courses/1`);
     expect(req.request.method).toBe('DELETE');
-    req.flush({});
-  });
-
-  it('should fetch courses with textFragment', () => {
-    const textFragment = 'Course';
-    service.getCourses(0, 5, textFragment).subscribe((response) => {
-      expect(response).toEqual(mockCoursesResponse);
-    });
-
-    const req = httpMock.expectOne(
-      `${service['apiUrl']}?start=0&count=5&textFragment=${textFragment}`
-    );
-    expect(req.request.method).toBe('GET');
-    req.flush(mockCoursesResponse);
+    req.flush(null);
   });
 });

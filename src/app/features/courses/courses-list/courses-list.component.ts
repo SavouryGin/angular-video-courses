@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CoursesService } from '../../../services/courses/courses.service';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppState } from '../../../store/app.state';
 import { Course } from '../../../models/course';
+import {
+  selectCourses,
+  selectCoursesLoading,
+  selectCoursesError,
+} from '../../../store/courses/courses.selectors';
+import { CoursesService } from '../../../services/courses/courses.service';
 
 @Component({
   selector: 'app-courses-list',
@@ -9,37 +17,35 @@ import { Course } from '../../../models/course';
   styleUrls: ['./courses-list.component.scss'],
 })
 export class CoursesListComponent implements OnInit {
-  courses: Course[] = [];
-  errorMessage: string | null = null;
+  courses$: Observable<Course[]>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
   currentPage: number = 0;
   pageSize: number = 5;
-  totalCourses: number = 0;
   searchQuery: string = '';
 
-  constructor(private coursesService: CoursesService, private router: Router) {}
+  constructor(
+    private store: Store<AppState>,
+    private router: Router,
+    private coursesService: CoursesService
+  ) {
+    this.courses$ = this.store.pipe(select(selectCourses));
+    this.loading$ = this.store.pipe(select(selectCoursesLoading));
+    this.error$ = this.store.pipe(select(selectCoursesError));
+  }
 
   ngOnInit() {
     this.loadCourses();
   }
 
   loadCourses(start: number = 0, count: number = 5, query: string = '') {
-    this.coursesService.getCourses(start, count, query).subscribe({
-      next: (response) => {
-        this.totalCourses = response.totalLength;
-        this.courses = [...this.courses, ...response.content];
-        this.currentPage++;
-      },
-      error: (error) => {
-        this.errorMessage = 'Failed to load courses';
-        console.error('Error loading courses', error);
-      },
-    });
+    this.coursesService.loadCourses(start, count, query);
   }
 
-  onSearch(results: Course[]) {
-    this.courses = results;
+  onSearch(query: string) {
     this.currentPage = 0;
-    this.totalCourses = results.length;
+    this.searchQuery = query;
+    this.loadCourses(0, this.pageSize, this.searchQuery);
   }
 
   onCourseDelete(courseId: string) {
@@ -52,7 +58,6 @@ export class CoursesListComponent implements OnInit {
           this.resetCourses();
         },
         error: (error) => {
-          this.errorMessage = 'Failed to delete course';
           console.error('Error deleting course', error);
         },
       });
@@ -74,7 +79,6 @@ export class CoursesListComponent implements OnInit {
 
   private resetCourses() {
     this.currentPage = 0;
-    this.courses = [];
     this.loadCourses(0, this.pageSize, this.searchQuery);
   }
 }

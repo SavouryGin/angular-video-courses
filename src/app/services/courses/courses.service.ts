@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Course, CoursesResponse } from '../../models/course';
-import { finalize, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { LoadingService } from '../loading/loading.service';
 import { environment } from '../../../environments/environment';
+import { Store } from '@ngrx/store';
+import * as CoursesActions from '../../store/courses/courses.actions';
+import { AppState } from '../../store/app.state';
 
 @Injectable({
   providedIn: 'root',
@@ -11,53 +13,48 @@ import { environment } from '../../../environments/environment';
 export class CoursesService {
   private readonly apiUrl = `${environment.apiUrl}/courses`;
 
-  constructor(
-    private http: HttpClient,
-    private loadingService: LoadingService
-  ) {}
+  constructor(private http: HttpClient, private store: Store<AppState>) {}
 
-  getCourses(
+  loadCourses(
+    start: number = 0,
+    count: number = 5,
+    textFragment?: string
+  ): void {
+    this.store.dispatch(
+      CoursesActions.loadCourses({ start, count, query: textFragment || '' })
+    );
+  }
+
+  fetchCourses(
     start: number = 0,
     count: number = 5,
     textFragment?: string
   ): Observable<CoursesResponse> {
-    this.loadingService.show();
     let params = new HttpParams()
       .set('start', start.toString())
       .set('count', count.toString());
     if (textFragment) {
       params = params.set('textFragment', textFragment);
     }
-    return this.http
-      .get<CoursesResponse>(this.apiUrl, { params })
-      .pipe(finalize(() => this.loadingService.hide()));
+    return this.http.get<CoursesResponse>(this.apiUrl, { params });
   }
 
   getCourseById(id: string): Observable<Course> {
-    this.loadingService.show();
-    return this.http
-      .get<Course>(`${this.apiUrl}/${id}`)
-      .pipe(finalize(() => this.loadingService.hide()));
+    return this.http.get<Course>(`${this.apiUrl}/${id}`);
   }
 
   createCourse(course: Course): Observable<Course> {
-    this.loadingService.show();
-    return this.http
-      .post<Course>(this.apiUrl, course)
-      .pipe(finalize(() => this.loadingService.hide()));
+    return this.http.post<Course>(this.apiUrl, course);
   }
 
   updateCourse(updatedCourse: Course): Observable<Course> {
-    this.loadingService.show();
-    return this.http
-      .patch<Course>(`${this.apiUrl}/${updatedCourse.id}`, updatedCourse)
-      .pipe(finalize(() => this.loadingService.hide()));
+    return this.http.patch<Course>(
+      `${this.apiUrl}/${updatedCourse.id}`,
+      updatedCourse
+    );
   }
 
   removeCourse(id: string): Observable<void> {
-    this.loadingService.show();
-    return this.http
-      .delete<void>(`${this.apiUrl}/${id}`)
-      .pipe(finalize(() => this.loadingService.hide()));
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

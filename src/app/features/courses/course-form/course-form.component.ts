@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CoursesService } from '../../../services/courses/courses.service';
+import { Store } from '@ngrx/store';
 import { Course } from '../../../models/course';
+import { AppState } from '../../../store/app.state';
+import * as CoursesActions from '../../../store/courses/courses.actions';
+import { selectCourses } from '../../../store/courses/courses.selectors';
 
 @Component({
   selector: 'app-course-form',
@@ -18,7 +21,7 @@ export class CourseFormComponent implements OnInit {
   errorMessage: string | null = null;
 
   constructor(
-    private coursesService: CoursesService,
+    private store: Store<AppState>,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -28,17 +31,16 @@ export class CourseFormComponent implements OnInit {
 
     if (this.courseId) {
       this.isEditMode = true;
-      this.coursesService.getCourseById(this.courseId).subscribe({
-        next: (course) => {
+      this.store.select(selectCourses).subscribe((courses) => {
+        const course = courses.find((c) => c.id == this.courseId);
+        if (course) {
           this.title = course.name;
           this.description = course.description ?? '';
           this.date = new Date(course.date).toISOString().split('T')[0];
           this.duration = course.length;
-        },
-        error: (error) => {
+        } else {
           this.errorMessage = 'Failed to load course details';
-          console.error('Error loading course details', error);
-        },
+        }
       });
     }
   }
@@ -54,15 +56,7 @@ export class CourseFormComponent implements OnInit {
       authors: [],
     };
 
-    this.coursesService.updateCourse(updatedCourse).subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        this.errorMessage = 'Failed to update course';
-        console.error('Error updating course', error);
-      },
-    });
+    this.store.dispatch(CoursesActions.updateCourse({ course: updatedCourse }));
   }
 
   addCourse() {
@@ -76,15 +70,7 @@ export class CourseFormComponent implements OnInit {
       authors: [],
     };
 
-    this.coursesService.createCourse(newCourse).subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        this.errorMessage = 'Failed to add course';
-        console.error('Error adding course', error);
-      },
-    });
+    this.store.dispatch(CoursesActions.createCourse({ course: newCourse }));
   }
 
   handleSave() {
@@ -93,6 +79,7 @@ export class CourseFormComponent implements OnInit {
     } else {
       this.addCourse();
     }
+    this.router.navigate(['/courses']);
   }
 
   handleCancel() {

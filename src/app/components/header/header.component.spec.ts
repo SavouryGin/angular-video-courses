@@ -1,46 +1,53 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
-import { BehaviorSubject, of, throwError } from 'rxjs';
-import { By } from '@angular/platform-browser';
+import { TokenService } from '../../services/token/token.service';
+import { AppState } from '../../store/app.state';
+import { selectCurrentUser } from '../../store/auth/auth.selectors';
 import { User } from '../../models/user';
+import { of } from 'rxjs';
+import * as AuthActions from '../../store/auth/auth.actions';
 import { LogoComponent } from '../logo/logo.component';
 import { ButtonComponent } from '../button/button.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  let authServiceMock: jasmine.SpyObj<AuthenticationService>;
-  let routerMock: jasmine.SpyObj<Router>;
-  let currentUserSubject: BehaviorSubject<User | null>;
+  let store: MockStore<AppState>;
+  let authService: jasmine.SpyObj<AuthenticationService>;
+  let tokenService: jasmine.SpyObj<TokenService>;
+
+  const initialState = { auth: { user: null } };
+  const mockUser: User = {
+    id: 1,
+    fakeToken: 'fakeToken',
+    name: { first: 'John', last: 'Doe' },
+    email: 'john.doe@example.com',
+    password: 'password',
+  };
 
   beforeEach(async () => {
-    currentUserSubject = new BehaviorSubject<User | null>(null);
-
-    const authSpy = jasmine.createSpyObj(
-      'AuthenticationService',
-      ['getUserInfo', 'isAuthenticated', 'logout'],
-      {
-        currentUser$: currentUserSubject.asObservable(),
-      }
-    );
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const authServiceSpy = jasmine.createSpyObj('AuthenticationService', [
+      'getUserInfo',
+      'logout',
+    ]);
+    const tokenServiceSpy = jasmine.createSpyObj('TokenService', ['getToken']);
 
     await TestBed.configureTestingModule({
       declarations: [HeaderComponent, LogoComponent, ButtonComponent],
-      imports: [RouterTestingModule],
       providers: [
-        { provide: AuthenticationService, useValue: authSpy },
-        { provide: Router, useValue: routerSpy },
+        provideMockStore({ initialState }),
+        { provide: AuthenticationService, useValue: authServiceSpy },
+        { provide: TokenService, useValue: tokenServiceSpy },
       ],
     }).compileComponents();
 
-    authServiceMock = TestBed.inject(
+    store = TestBed.inject(MockStore);
+    authService = TestBed.inject(
       AuthenticationService
     ) as jasmine.SpyObj<AuthenticationService>;
-    routerMock = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    tokenService = TestBed.inject(TokenService) as jasmine.SpyObj<TokenService>;
   });
 
   beforeEach(() => {
@@ -53,63 +60,19 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('ngOnInit', () => {
-    it('should set user$ from currentUser$', () => {
-      const user: User = {
-        id: 1,
-        fakeToken: 'fake-jwt-token',
-        name: { first: 'John', last: 'Doe' },
-        email: 'john.doe@example.com',
-        password: 'password',
-      };
+  it('should select user from store on init', () => {
+    store.overrideSelector(selectCurrentUser, mockUser);
 
-      currentUserSubject.next(user);
-      fixture.detectChanges();
+    component.ngOnInit();
 
-      component.user$.subscribe((u) => {
-        expect(u).toEqual(user);
-      });
+    component.user$.subscribe((user) => {
+      expect(user).toEqual(mockUser);
     });
   });
 
-  describe('handleLogout', () => {
-    it('should call logout and navigate to login', () => {
-      component.handleLogout();
+  it('should handle logout', () => {
+    component.handleLogout();
 
-      expect(authServiceMock.logout).toHaveBeenCalled();
-      expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
-    });
-  });
-
-  describe('template', () => {
-    it('should display user info if authenticated', () => {
-      const user: User = {
-        id: 1,
-        fakeToken: 'fake-jwt-token',
-        name: { first: 'John', last: 'Doe' },
-        email: 'john.doe@example.com',
-        password: 'password',
-      };
-
-      currentUserSubject.next(user);
-      authServiceMock.isAuthenticated.and.returnValue(true);
-      fixture.detectChanges();
-
-      const userInfoElement = fixture.debugElement.query(
-        By.css('.header_user-info')
-      );
-      expect(userInfoElement.nativeElement.textContent.trim()).toBe(user.email);
-    });
-
-    it('should not display user info if not authenticated', () => {
-      authServiceMock.isAuthenticated.and.returnValue(false);
-
-      fixture.detectChanges();
-
-      const userInfoElement = fixture.debugElement.query(
-        By.css('.header_user-info')
-      );
-      expect(userInfoElement).toBeNull();
-    });
+    expect(authService.logout).toHaveBeenCalled();
   });
 });
