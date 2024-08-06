@@ -8,7 +8,6 @@ import {
 @Component({
   selector: 'app-form-text-input',
   templateUrl: './form-text-input.component.html',
-  styleUrls: ['./form-text-input.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

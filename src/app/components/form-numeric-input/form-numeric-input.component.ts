@@ -8,7 +8,6 @@ import {
 @Component({
   selector: 'app-form-numeric-input',
   templateUrl: './form-numeric-input.component.html',
-  styleUrls: ['./form-numeric-input.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

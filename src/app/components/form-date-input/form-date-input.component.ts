@@ -8,7 +8,6 @@ import {
 @Component({
   selector: 'app-form-date-input',
   templateUrl: './form-date-input.component.html',
-  styleUrls: ['./form-date-input.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

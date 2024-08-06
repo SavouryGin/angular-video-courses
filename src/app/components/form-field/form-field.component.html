@@ -1,5 +1,5 @@
 <div class="form-field">
-  <label [for]="name">{{ label }}</label>
+  <label [for]="name" class="form-field_label">{{ label }}</label>
   <ng-container [ngSwitch]="type">
     <input
       *ngSwitchCase="'text'"
@@ -8,6 +8,7 @@
       [attr.maxLength]="maxLength"
       [required]="required"
       [id]="name"
+      class="form-field_text-input"
     />
     <input
       *ngSwitchCase="'number'"
@@ -15,6 +16,7 @@
       [formControl]="control"
       [required]="required"
       [id]="name"
+      class="form-field_numeric-input"
     />
     <textarea
       *ngSwitchCase="'textarea'"
@@ -22,9 +24,13 @@
       [attr.maxLength]="maxLength"
       [required]="required"
       [id]="name"
+      class="form-field_textarea"
     ></textarea>
   </ng-container>
-  <div *ngIf="control.invalid && control.touched" class="error-messages">
+  <div
+    *ngIf="control.invalid && control.touched"
+    class="form-field_error-messages"
+  >
     <span *ngIf="control.errors?.['required']">This field is required.</span>
     <span *ngIf="control.errors?.['maxlength']">Maximum length exceeded.</span>
     <span *ngIf="control.errors?.['pattern']">Only numbers are allowed.</span>
