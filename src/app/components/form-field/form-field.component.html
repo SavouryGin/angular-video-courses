@@ -2,15 +2,6 @@
   <label [for]="name" class="form-field_label">{{ label }}</label>
   <ng-container [ngSwitch]="type">
     <input
-      *ngSwitchCase="'text'"
-      [type]="type"
-      [formControl]="control"
-      [attr.maxLength]="maxLength"
-      [required]="required"
-      [id]="name"
-      class="form-field_text-input"
-    />
-    <input
       *ngSwitchCase="'number'"
       [type]="type"
       [formControl]="control"
@@ -26,6 +17,15 @@
       [id]="name"
       class="form-field_textarea"
     ></textarea>
+    <input
+      *ngSwitchDefault
+      [type]="type"
+      [formControl]="control"
+      [attr.maxLength]="maxLength"
+      [required]="required"
+      [id]="name"
+      class="form-field_text-input"
+    />
   </ng-container>
   <div
     *ngIf="control.invalid && control.touched"
@@ -34,6 +34,9 @@
     <span *ngIf="control.errors?.['required']">This field is required.</span>
     <span *ngIf="control.errors?.['maxlength']">Maximum length exceeded.</span>
     <span *ngIf="control.errors?.['pattern']">Only numbers are allowed.</span>
+    <span *ngIf="control.errors?.['email']"
+      >The input should be a valid email.</span
+    >
     <span *ngIf="control.errors?.['invalidDateFormat']"
       >Invalid date format. Please use dd/mm/yyyy.</span
     >

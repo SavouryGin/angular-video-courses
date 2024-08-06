@@ -19,6 +19,7 @@ import {
 export class FormTextAreaComponent implements ControlValueAccessor, OnInit {
   @Input() label!: string;
   @Input() name!: string;
+  @Input() required!: boolean;
   control = new FormControl();
 
   private onChange: any = () => {};

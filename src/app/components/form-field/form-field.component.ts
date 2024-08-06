@@ -51,6 +51,9 @@ export class FormFieldComponent implements ControlValueAccessor, OnInit {
     if (this.type === 'text' && this.name === 'date') {
       validators.push(this.dateFormatValidator());
     }
+    if (this.type === 'email') {
+      validators.push(Validators.email);
+    }
     this.control.setValidators(validators);
     this.control.updateValueAndValidity();
   }
@@ -77,6 +80,7 @@ export class FormFieldComponent implements ControlValueAccessor, OnInit {
   }
 
   validate() {
+    console.log('validate', this.control.valid);
     return this.control.valid
       ? null
       : { invalidForm: { valid: false, message: 'field is invalid' } };

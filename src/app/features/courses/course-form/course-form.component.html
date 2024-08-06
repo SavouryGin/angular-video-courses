@@ -5,24 +5,28 @@
       label="Title"
       name="title"
       formControlName="title"
+      [required]="true"
     ></app-form-text-input>
 
     <app-form-text-area
       label="Description"
       name="description"
       formControlName="description"
+      [required]="true"
     ></app-form-text-area>
 
     <app-form-date-input
       label="Date"
       name="date"
       formControlName="date"
+      [required]="true"
     ></app-form-date-input>
 
     <app-form-numeric-input
       label="Duration (minutes)"
       name="duration"
       formControlName="duration"
+      [required]="true"
     ></app-form-numeric-input>
 
     <div class="buttons">

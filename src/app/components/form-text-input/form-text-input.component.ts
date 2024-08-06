@@ -19,6 +19,9 @@ import {
 export class FormTextInputComponent implements ControlValueAccessor, OnInit {
   @Input() label!: string;
   @Input() name!: string;
+  @Input() type!: string;
+  @Input() required!: boolean;
+  @Input() maxLength!: number;
   control = new FormControl();
 
   private onChange: any = () => {};
