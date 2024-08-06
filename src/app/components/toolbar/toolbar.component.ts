@@ -6,6 +6,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CoursesService } from '../../services/courses/courses.service';
@@ -16,17 +17,25 @@ import { CoursesService } from '../../services/courses/courses.service';
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
-  searchQuery: string = '';
-  private searchSubject = new Subject<string>();
+  searchForm: FormGroup;
   private searchSubscription!: Subscription;
 
   @Output() search = new EventEmitter<string>();
 
-  constructor(private router: Router, private coursesService: CoursesService) {}
+  constructor(
+    private router: Router,
+    private coursesService: CoursesService,
+    private fb: FormBuilder
+  ) {
+    this.searchForm = this.fb.group({
+      searchQuery: [''],
+    });
+  }
 
   ngOnInit() {
-    this.searchSubscription = this.searchSubject
-      .pipe(
+    this.searchSubscription = this.searchForm
+      .get('searchQuery')!
+      .valueChanges.pipe(
         debounceTime(300), // Wait 300ms after the last event before emitting last event
         distinctUntilChanged() // Only emit if value is different from the last value
       )
@@ -46,13 +55,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSearchInputChange(query: string) {
-    this.searchSubject.next(query);
-  }
-
   handleClearSearch() {
-    this.searchQuery = '';
-    this.searchSubject.next('');
+    this.searchForm.get('searchQuery')!.setValue('');
     this.coursesService.loadCourses(0, 5, '');
   }
 

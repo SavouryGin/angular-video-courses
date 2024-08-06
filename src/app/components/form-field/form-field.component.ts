@@ -80,7 +80,6 @@ export class FormFieldComponent implements ControlValueAccessor, OnInit {
   }
 
   validate() {
-    console.log('validate', this.control.valid);
     return this.control.valid
       ? null
       : { invalidForm: { valid: false, message: 'field is invalid' } };
