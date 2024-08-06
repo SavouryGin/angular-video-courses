@@ -34,5 +34,8 @@
     <span *ngIf="control.errors?.['required']">This field is required.</span>
     <span *ngIf="control.errors?.['maxlength']">Maximum length exceeded.</span>
     <span *ngIf="control.errors?.['pattern']">Only numbers are allowed.</span>
+    <span *ngIf="control.errors?.['invalidDateFormat']"
+      >Invalid date format. Please use dd/mm/yyyy.</span
+    >
   </div>
 </div>
