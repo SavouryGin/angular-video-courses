@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Course } from '../../../models/course';
+import { Course, Author } from '../../../models/course';
 import { AppState } from '../../../store/app.state';
 import * as CoursesActions from '../../../store/courses/courses.actions';
 import { selectCourses } from '../../../store/courses/courses.selectors';
+import { CoursesService } from '../../../services/courses/courses.service';
 
 @Component({
   selector: 'app-course-form',
@@ -17,12 +18,14 @@ export class CourseFormComponent implements OnInit {
   isEditMode: boolean = false;
   courseId?: string;
   errorMessage: string | null = null;
+  selectedAuthors: Author[] = [];
 
   constructor(
     private store: Store<AppState>,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private coursesService: CoursesService
   ) {}
 
   ngOnInit() {
@@ -41,6 +44,7 @@ export class CourseFormComponent implements OnInit {
         ],
       ],
       duration: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      authors: [[], Validators.required],
     });
 
     if (this.courseId) {
@@ -53,7 +57,9 @@ export class CourseFormComponent implements OnInit {
             description: course.description ?? '',
             date: new Date(course.date).toISOString().split('T')[0],
             duration: course.length,
+            authors: course.authors,
           });
+          this.selectedAuthors = course.authors;
         } else {
           this.errorMessage = 'Failed to load course details';
         }
@@ -69,7 +75,7 @@ export class CourseFormComponent implements OnInit {
       date: this.courseForm.value.date,
       length: +this.courseForm.value.duration,
       isTopRated: false,
-      authors: [],
+      authors: this.courseForm.value.authors,
     };
 
     this.store.dispatch(CoursesActions.updateCourse({ course: updatedCourse }));
@@ -83,7 +89,7 @@ export class CourseFormComponent implements OnInit {
       date: this.courseForm.value.date,
       length: +this.courseForm.value.duration,
       isTopRated: false,
-      authors: [],
+      authors: this.courseForm.value.authors,
     };
 
     this.store.dispatch(CoursesActions.createCourse({ course: newCourse }));
@@ -102,5 +108,9 @@ export class CourseFormComponent implements OnInit {
 
   handleCancel() {
     this.router.navigate(['/']);
+  }
+
+  handleSelectedAuthorsChange(authors: Author[]) {
+    this.courseForm.get('authors')!.setValue(authors);
   }
 }

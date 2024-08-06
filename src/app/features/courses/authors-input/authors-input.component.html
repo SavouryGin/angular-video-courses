@@ -1,0 +1,19 @@
+<div class="authors-input">
+  <label for="authors">Authors</label>
+  <input
+    type="text"
+    [formControl]="authorSearchControl"
+    placeholder="Search authors"
+  />
+  <ul class="authors-list">
+    <li *ngFor="let author of authors" (click)="handleAuthorSelect(author)">
+      {{ author.name }}
+    </li>
+  </ul>
+  <div class="selected-authors">
+    <span *ngFor="let author of selectedAuthors">
+      {{ author.name }}
+      <button (click)="handleAuthorRemove(author)">x</button>
+    </span>
+  </div>
+</div>

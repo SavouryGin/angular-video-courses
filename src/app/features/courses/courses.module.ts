@@ -12,6 +12,7 @@ import { CourseBorderDirective } from '../../directives/course-border/course-bor
 import { DurationPipe } from '../../pipes/duration';
 import { OrderByPipe } from '../../pipes/order-by';
 import { ToolbarComponent } from '../../components/toolbar/toolbar.component';
+import { AuthorsInputComponent } from './authors-input/authors-input.component';
 
 const routes: Routes = [
   {
@@ -40,6 +41,7 @@ const routes: Routes = [
     DurationPipe,
     OrderByPipe,
     ToolbarComponent,
+    AuthorsInputComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,36 @@
+.authors-input {
+  .authors-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+  }
+
+  .authors-list li {
+    padding: 8px;
+    cursor: pointer;
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+
+  .selected-authors {
+    margin-top: 10px;
+    span {
+      display: inline-block;
+      background-color: #e0e0e0;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-right: 5px;
+      button {
+        margin-left: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #ff0000;
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Course, CoursesResponse } from '../../models/course';
+import { Author, Course, CoursesResponse } from '../../models/course';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -12,6 +12,7 @@ import { AppState } from '../../store/app.state';
 })
 export class CoursesService {
   private readonly apiUrl = `${environment.apiUrl}/courses`;
+  private readonly authorsUrl = `${environment.apiUrl}/authors`;
 
   constructor(private http: HttpClient, private store: Store<AppState>) {}
 
@@ -56,5 +57,9 @@ export class CoursesService {
 
   removeCourse(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getAuthors(): Observable<Author[]> {
+    return this.http.get<Author[]>(this.authorsUrl);
   }
 }
