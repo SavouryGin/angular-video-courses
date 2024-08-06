@@ -15,6 +15,7 @@ export class AuthorsInputComponent implements OnInit {
 
   authors: Author[] = [];
   authorSearchControl = new FormControl('');
+  showDropdown: boolean = false;
 
   constructor(private coursesService: CoursesService) {}
 
@@ -28,12 +29,14 @@ export class AuthorsInputComponent implements OnInit {
 
   handleAuthorSearch(query: string | null) {
     if (query?.length && query.length > 0) {
+      this.showDropdown = true;
       this.coursesService.getAuthors().subscribe((authors) => {
         this.authors = authors.filter((author) =>
           author.name.toLowerCase().includes(query.toLowerCase())
         );
       });
     } else {
+      this.showDropdown = false;
       this.authors = [];
     }
   }
@@ -42,6 +45,7 @@ export class AuthorsInputComponent implements OnInit {
     if (!this.selectedAuthors.find((a) => a.id === author.id)) {
       this.selectedAuthors.push(author);
       this.selectedAuthorsChange.emit(this.selectedAuthors);
+      this.showDropdown = false;
     }
   }
 

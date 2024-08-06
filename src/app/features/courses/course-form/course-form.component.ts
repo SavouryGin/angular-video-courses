@@ -6,7 +6,6 @@ import { Course, Author } from '../../../models/course';
 import { AppState } from '../../../store/app.state';
 import * as CoursesActions from '../../../store/courses/courses.actions';
 import { selectCourses } from '../../../store/courses/courses.selectors';
-import { CoursesService } from '../../../services/courses/courses.service';
 
 @Component({
   selector: 'app-course-form',
@@ -24,8 +23,7 @@ export class CourseFormComponent implements OnInit {
     private store: Store<AppState>,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
-    private coursesService: CoursesService
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -51,11 +49,12 @@ export class CourseFormComponent implements OnInit {
       this.isEditMode = true;
       this.store.select(selectCourses).subscribe((courses) => {
         const course = courses.find((c) => c.id == this.courseId);
+
         if (course) {
           this.courseForm.patchValue({
             title: course.name,
             description: course.description ?? '',
-            date: new Date(course.date).toISOString().split('T')[0],
+            date: this.formatCourseDate(course.date),
             duration: course.length,
             authors: course.authors,
           });
@@ -65,6 +64,17 @@ export class CourseFormComponent implements OnInit {
         }
       });
     }
+  }
+
+  formatCourseDate(courseDate: string) {
+    const date = new Date(courseDate);
+    return (
+      date.getDate().toString().padStart(2, '0') +
+      '/' +
+      (date.getMonth() + 1).toString().padStart(2, '0') +
+      '/' +
+      date.getFullYear()
+    );
   }
 
   updateCourse() {
