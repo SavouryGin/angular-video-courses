@@ -108,14 +108,12 @@ export class CourseFormComponent implements OnInit {
   }
 
   handleSave() {
-    if (this.courseForm.valid) {
-      if (this.isEditMode) {
-        this.updateCourse();
-      } else {
-        this.addCourse();
-      }
-      this.router.navigate(['/courses']);
+    if (this.isEditMode) {
+      this.updateCourse();
+    } else {
+      this.addCourse();
     }
+    this.router.navigate(['/courses']);
   }
 
   handleCancel() {

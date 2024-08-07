@@ -65,7 +65,7 @@ describe('CourseTileComponent', () => {
     expect(durationElement.textContent).toContain('Duration:');
     expect(durationElement.textContent).toContain('2h');
     expect(dateElement.textContent).toContain('Creation Date:');
-    expect(dateElement.textContent).toContain('07/02/2024');
+    expect(dateElement.textContent).toContain('02/07/2024');
   });
 
   it('should display top-rated star if course is top-rated', () => {
