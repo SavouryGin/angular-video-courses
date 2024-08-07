@@ -31,7 +31,9 @@ export class AuthInterceptor implements HttpInterceptor {
       });
     }
 
-    this.loadingService.show();
+    if (!clonedReq.url.includes('authors')) {
+      this.loadingService.show();
+    }
 
     return next.handle(clonedReq).pipe(
       tap({

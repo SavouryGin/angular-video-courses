@@ -59,7 +59,11 @@ export class CoursesService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  getAuthors(): Observable<Author[]> {
-    return this.http.get<Author[]>(this.authorsUrl);
+  getAuthors(textFragment?: string): Observable<Author[]> {
+    let params = new HttpParams();
+    if (textFragment) {
+      params = params.set('textFragment', textFragment);
+    }
+    return this.http.get<Author[]>(this.authorsUrl, { params });
   }
 }

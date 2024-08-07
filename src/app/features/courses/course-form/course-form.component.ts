@@ -54,7 +54,7 @@ export class CourseFormComponent implements OnInit {
           this.courseForm.patchValue({
             title: course.name,
             description: course.description ?? '',
-            date: this.formatCourseDate(course.date),
+            date: this.formatServerDate(course.date),
             duration: course.length,
             authors: course.authors,
           });
@@ -66,15 +66,17 @@ export class CourseFormComponent implements OnInit {
     }
   }
 
-  formatCourseDate(courseDate: string) {
-    const date = new Date(courseDate);
-    return (
-      date.getDate().toString().padStart(2, '0') +
-      '/' +
-      (date.getMonth() + 1).toString().padStart(2, '0') +
-      '/' +
-      date.getFullYear()
-    );
+  formatServerDate(courseDate: string) {
+    const dateObject = new Date(courseDate);
+    const date = dateObject.getDate().toString().padStart(2, '0');
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+    const year = dateObject.getFullYear();
+    return `${date}/${month}/${year}`;
+  }
+
+  formatInputDate(dateString: string) {
+    const [date, month, year] = dateString.split('/');
+    return `${year}-${month}-${date}T00:00:00Z`;
   }
 
   updateCourse() {
@@ -82,7 +84,7 @@ export class CourseFormComponent implements OnInit {
       id: this.courseId!,
       name: this.courseForm.value.title,
       description: this.courseForm.value.description,
-      date: this.courseForm.value.date,
+      date: this.formatInputDate(this.courseForm.value.date),
       length: +this.courseForm.value.duration,
       isTopRated: false,
       authors: this.courseForm.value.authors,
@@ -96,7 +98,7 @@ export class CourseFormComponent implements OnInit {
       id: crypto.randomUUID(),
       name: this.courseForm.value.title,
       description: this.courseForm.value.description,
-      date: this.courseForm.value.date,
+      date: this.formatInputDate(this.courseForm.value.date),
       length: +this.courseForm.value.duration,
       isTopRated: false,
       authors: this.courseForm.value.authors,

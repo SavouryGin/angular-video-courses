@@ -30,10 +30,8 @@ export class AuthorsInputComponent implements OnInit {
   handleAuthorSearch(query: string | null) {
     if (query?.length && query.length > 0) {
       this.showDropdown = true;
-      this.coursesService.getAuthors().subscribe((authors) => {
-        this.authors = authors.filter((author) =>
-          author.name.toLowerCase().includes(query.toLowerCase())
-        );
+      this.coursesService.getAuthors(query).subscribe((authors) => {
+        this.authors = authors;
       });
     } else {
       this.showDropdown = false;
