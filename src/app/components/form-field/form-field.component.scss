@@ -1,0 +1,28 @@
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &_label {
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  &_error-messages {
+    color: red;
+  }
+
+  &_text-input,
+  &_numeric-input,
+  &_textarea {
+    padding: 0.4rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  &_textarea {
+    resize: none;
+    height: 6rem;
+  }
+}

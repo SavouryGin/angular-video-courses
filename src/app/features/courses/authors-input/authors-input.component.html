@@ -1,0 +1,20 @@
+<div class="authors-input">
+  <app-form-text-input
+    type="text"
+    label="Authors"
+    name="authors"
+    [formControl]="authorSearchControl"
+    [required]="true"
+  ></app-form-text-input>
+  <ul *ngIf="showDropdown" class="authors-list">
+    <li *ngFor="let author of authors" (click)="handleAuthorSelect(author)">
+      {{ author.name }}
+    </li>
+  </ul>
+  <div class="selected-authors">
+    <span *ngFor="let author of selectedAuthors">
+      {{ author.name }} {{ author.lastName }}
+      <button (click)="handleAuthorRemove(author)">&#x2715;</button>
+    </span>
+  </div>
+</div>
