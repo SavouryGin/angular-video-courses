@@ -1,0 +1,9 @@
+{
+  "locale": "ru",
+  "translations": {
+    "durationLabel": "Продолжительность:",
+    "creationDateLabel": "Дата создания:",
+    "copyrightFooter": "Copyright © Видеокурсы. Все права защищены",
+    "mainHeader": "Видеокурсы"
+  }
+}

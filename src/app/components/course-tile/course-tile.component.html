@@ -23,9 +23,12 @@
       </svg>
     </h2>
     <div class="course-tile_info">
-      <p><strong>Duration:</strong> {{ course.length | duration }}</p>
       <p>
-        <strong>Creation Date:</strong>
+        <strong i18n="@@durationLabel">Duration:</strong>
+        {{ course.length | duration }}
+      </p>
+      <p>
+        <strong i18n="@@creationDateLabel">Creation Date:</strong>
         {{ course.date | date : "MM/dd/yyyy" }}
       </p>
     </div>

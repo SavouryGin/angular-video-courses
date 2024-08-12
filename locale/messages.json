@@ -1,0 +1,9 @@
+{
+  "locale": "en",
+  "translations": {
+    "durationLabel": "Duration:",
+    "creationDateLabel": "Creation Date:",
+    "copyrightFooter": "Copyright © Videocourses. All rights reserved",
+    "mainHeader": "Video Course"
+  }
+}
