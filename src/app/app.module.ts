@@ -52,8 +52,8 @@ import { LanguageSelectComponent } from './components/language-select/language-s
     HttpClientModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
-      logOnly: environment.production, // Restrict extension to log-only mode in production
+      maxAge: 25,
+      logOnly: environment.production,
     }),
     EffectsModule.forRoot([AuthEffects, CoursesEffects]),
     TranslateModule.forRoot({
