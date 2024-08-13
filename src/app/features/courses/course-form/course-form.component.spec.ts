@@ -18,6 +18,15 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { FormFieldComponent } from '../../../components/form-field/form-field.component';
+import { SharedModule } from '../../../shared/shared.module';
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({ name: 'translate' })
+class MockTranslatePipe implements PipeTransform {
+  transform(value: any): any {
+    return value;
+  }
+}
 
 describe('CourseFormComponent', () => {
   let component: CourseFormComponent;
@@ -49,9 +58,11 @@ describe('CourseFormComponent', () => {
         FormNumericInputComponent,
         AuthorsInputComponent,
         ButtonComponent,
+        MockTranslatePipe,
       ],
       imports: [
         RouterModule,
+        SharedModule,
         ReactiveFormsModule,
         StoreModule.forRoot({ courses: coursesReducer }),
         HttpClientTestingModule,

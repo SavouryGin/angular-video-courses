@@ -1,11 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CourseTileComponent } from './course-tile.component';
 import { By } from '@angular/platform-browser';
-import { NO_ERRORS_SCHEMA, ChangeDetectionStrategy } from '@angular/core';
+import {
+  NO_ERRORS_SCHEMA,
+  ChangeDetectionStrategy,
+  PipeTransform,
+  Pipe,
+} from '@angular/core';
 import { Course } from '../../models/course';
 import { ButtonComponent } from '../button/button.component';
 import { CourseBorderDirective } from '../../directives/course-border/course-border.directive';
 import { DurationPipe } from '../../pipes/duration';
+import { TranslateModule } from '@ngx-translate/core';
+
+@Pipe({ name: 'translate' })
+class MockTranslatePipe implements PipeTransform {
+  transform(value: any): any {
+    return value;
+  }
+}
 
 describe('CourseTileComponent', () => {
   let component: CourseTileComponent;
@@ -14,11 +27,13 @@ describe('CourseTileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [TranslateModule],
       declarations: [
         CourseTileComponent,
         ButtonComponent,
         CourseBorderDirective,
         DurationPipe,
+        MockTranslatePipe,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
@@ -62,9 +77,9 @@ describe('CourseTileComponent', () => {
     const durationElement: HTMLElement = infoElements[0].nativeElement;
     const dateElement: HTMLElement = infoElements[1].nativeElement;
 
-    expect(durationElement.textContent).toContain('Duration:');
-    expect(durationElement.textContent).toContain('2h');
-    expect(dateElement.textContent).toContain('Creation Date:');
+    expect(durationElement.textContent).toContain('durationLabel');
+    expect(durationElement.textContent).toContain('2h 0min');
+    expect(dateElement.textContent).toContain('creationDateLabel');
     expect(dateElement.textContent).toContain('02/07/2024');
   });
 

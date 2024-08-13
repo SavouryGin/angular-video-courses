@@ -9,10 +9,13 @@
   "logoutButton": "Log Out",
   "saveButton": "Save",
   "cancelButton": "Cancel",
+  "loadMoreButton": "Load More",
   "searchPlaceholder": "Search courses",
-  "languageLabel": "Language",
+  "languageLabel": "Language:",
   "addCourseHeader": "Add New Course",
-  "titleLabel": "Title",
-  "descriptionLabel": "Description",
-  "dateLabel": "Date"
+  "editCourseLabel": "Edit Course",
+  "titleLabel": "Title:",
+  "descriptionLabel": "Description:",
+  "dateLabel": "Date:",
+  "authorsLabel": "Authors:"
 }
