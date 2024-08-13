@@ -11,7 +11,11 @@ import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { SharedModule } from './shared/shared.module';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from './shared/strategies/custom-route-reuse-strategy';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpClientModule,
+} from '@angular/common/http';
 import { AuthInterceptor } from './services/authentication/auth.interceptor';
 import { LoadingBlockComponent } from './components/loading-block/loading-block.component';
 import { StoreModule } from '@ngrx/store';
@@ -21,6 +25,13 @@ import { environment } from '../environments/environment';
 import { AuthEffects } from './store/auth/auth.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { CoursesEffects } from './store/courses/courses.effects';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
+import { createTranslateLoader } from './services/translate-loader/translate-loader.service';
+import { LanguageSelectComponent } from './components/language-select/language-select.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +40,7 @@ import { CoursesEffects } from './store/courses/courses.effects';
     FooterComponent,
     LogoComponent,
     LoadingBlockComponent,
+    LanguageSelectComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +55,13 @@ import { CoursesEffects } from './store/courses/courses.effects';
       logOnly: environment.production, // Restrict extension to log-only mode in production
     }),
     EffectsModule.forRoot([AuthEffects, CoursesEffects]),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient],
+      },
+    }),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
@@ -51,6 +70,7 @@ import { CoursesEffects } from './store/courses/courses.effects';
       useClass: AuthInterceptor,
       multi: true,
     },
+    TranslateService,
   ],
   bootstrap: [AppComponent],
 })

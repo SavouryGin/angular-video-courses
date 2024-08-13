@@ -24,11 +24,11 @@
     </h2>
     <div class="course-tile_info">
       <p>
-        <strong i18n="@@durationLabel">Duration:</strong>
+        <strong>{{ "durationLabel" | translate }}</strong>
         {{ course.length | duration }}
       </p>
       <p>
-        <strong i18n="@@creationDateLabel">Creation Date:</strong>
+        <strong>{{ "creationDateLabel" | translate }}</strong>
         {{ course.date | date : "MM/dd/yyyy" }}
       </p>
     </div>

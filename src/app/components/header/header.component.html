@@ -1,5 +1,6 @@
 <header class="header">
   <app-logo></app-logo>
+  <app-language-select></app-language-select>
   <div class="header_user-actions" *ngIf="user$ | async as user">
     <span class="header_user-info">
       {{ user.email }}
