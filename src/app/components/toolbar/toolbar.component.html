@@ -1,21 +1,21 @@
 <div class="toolbar">
-  <div class="toolbar_search">
+  <form [formGroup]="searchForm" class="toolbar_search">
     <input
       type="text"
+      formControlName="searchQuery"
       placeholder="Search courses"
-      [(ngModel)]="searchQuery"
       class="toolbar_input"
-      (keyup)="onSearchInputChange(searchQuery)"
     />
     <button
-      *ngIf="searchQuery"
+      *ngIf="searchForm.get('searchQuery')?.value"
       class="toolbar_clear"
       (click)="handleClearSearch()"
+      type="button"
       aria-label="Clear search"
     >
       &#x2715;
     </button>
-  </div>
+  </form>
   <app-button
     text="Add Course"
     (onClick)="handleAddCourse()"
