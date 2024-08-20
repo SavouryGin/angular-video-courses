@@ -7,6 +7,7 @@ import { CoursesService } from '../../../services/courses/courses.service';
 import { Author } from '../../../models/course';
 import { FormTextInputComponent } from '../../../components/form-text-input/form-text-input.component';
 import { FormFieldComponent } from '../../../components/form-field/form-field.component';
+import { Pipe, PipeTransform } from '@angular/core';
 
 class MockCoursesService {
   getAuthors(query: string) {
@@ -22,6 +23,13 @@ class MockCoursesService {
   }
 }
 
+@Pipe({ name: 'translate' })
+class MockTranslatePipe implements PipeTransform {
+  transform(value: any): any {
+    return value;
+  }
+}
+
 describe('AuthorsInputComponent', () => {
   let component: AuthorsInputComponent;
   let fixture: ComponentFixture<AuthorsInputComponent>;
@@ -33,6 +41,7 @@ describe('AuthorsInputComponent', () => {
         AuthorsInputComponent,
         FormTextInputComponent,
         FormFieldComponent,
+        MockTranslatePipe,
       ],
       imports: [ReactiveFormsModule],
       providers: [{ provide: CoursesService, useClass: MockCoursesService }],

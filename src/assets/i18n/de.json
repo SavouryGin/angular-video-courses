@@ -1,0 +1,21 @@
+{
+  "durationLabel": "Dauer:",
+  "creationDateLabel": "Erstellungsdatum:",
+  "copyrightFooter": "Urheberrecht © Videokurse. Alle Rechte vorbehalten",
+  "mainHeader": "Videokurs",
+  "addButton": "Kurs hinzufügen",
+  "editButton": "Bearbeiten",
+  "deleteButton": "Löschen",
+  "logoutButton": "Abmelden",
+  "saveButton": "Speichern",
+  "cancelButton": "Abbrechen",
+  "loadMoreButton": "Mehr laden",
+  "searchPlaceholder": "Kurse suchen",
+  "languageLabel": "Sprache:",
+  "addCourseHeader": "Neuen Kurs hinzufügen",
+  "editCourseLabel": "Kurs bearbeiten",
+  "titleLabel": "Titel:",
+  "descriptionLabel": "Beschreibung:",
+  "dateLabel": "Datum:",
+  "authorsLabel": "Autoren:"
+}

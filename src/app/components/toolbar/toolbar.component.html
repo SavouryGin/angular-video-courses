@@ -3,7 +3,7 @@
     <input
       type="text"
       formControlName="searchQuery"
-      placeholder="Search courses"
+      placeholder="{{ 'searchPlaceholder' | translate }}"
       class="toolbar_input"
     />
     <button
@@ -17,7 +17,7 @@
     </button>
   </form>
   <app-button
-    text="Add Course"
+    text="{{ 'addButton' | translate }}"
     (onClick)="handleAddCourse()"
     class="toolbar_add-button"
   ></app-button>

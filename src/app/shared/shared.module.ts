@@ -7,6 +7,7 @@ import { FormNumericInputComponent } from '../components/form-numeric-input/form
 import { FormTextAreaComponent } from '../components/form-text-area/form-text-area.component';
 import { FormFieldComponent } from '../components/form-field/form-field.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     FormDateInputComponent,
     FormNumericInputComponent,
     FormTextAreaComponent,
+    TranslateModule,
   ],
 })
 export class SharedModule {}

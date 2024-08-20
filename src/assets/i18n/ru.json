@@ -1,0 +1,21 @@
+{
+  "durationLabel": "Продолжительность:",
+  "creationDateLabel": "Дата создания:",
+  "copyrightFooter": "Авторские права © Видеокурсы. Все права защищены",
+  "mainHeader": "Видеокурс",
+  "addButton": "Добавить курс",
+  "editButton": "Редактировать",
+  "deleteButton": "Удалить",
+  "logoutButton": "Выйти",
+  "saveButton": "Сохранить",
+  "cancelButton": "Отмена",
+  "loadMoreButton": "Загрузить больше",
+  "searchPlaceholder": "Поиск курсов",
+  "languageLabel": "Язык:",
+  "addCourseHeader": "Добавить новый курс",
+  "editCourseLabel": "Редактировать курс",
+  "titleLabel": "Название:",
+  "descriptionLabel": "Описание:",
+  "dateLabel": "Дата:",
+  "authorsLabel": "Авторы:"
+}

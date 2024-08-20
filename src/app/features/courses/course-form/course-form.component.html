@@ -1,29 +1,31 @@
 <div class="course-form">
-  <h2>{{ isEditMode ? "Edit Course" : "Add New Course" }}</h2>
+  <h2>
+    {{ isEditMode ? "editCourseLabel" : ("addCourseHeader" | translate) }}
+  </h2>
   <form [formGroup]="courseForm">
     <app-form-text-input
-      label="Title"
+      label="{{ 'titleLabel' | translate }}"
       name="title"
       formControlName="title"
       [required]="true"
     ></app-form-text-input>
 
     <app-form-text-area
-      label="Description"
+      label="{{ 'descriptionLabel' | translate }}"
       name="description"
       formControlName="description"
       [required]="true"
     ></app-form-text-area>
 
     <app-form-date-input
-      label="Date"
+      label="{{ 'dateLabel' | translate }}"
       name="date"
       formControlName="date"
       [required]="true"
     ></app-form-date-input>
 
     <app-form-numeric-input
-      label="Duration (minutes)"
+      label="{{ 'durationLabel' | translate }}"
       name="duration"
       formControlName="duration"
       [required]="true"
@@ -36,12 +38,12 @@
 
     <div class="buttons">
       <app-button
-        text="Cancel"
+        text="{{ 'cancelButton' | translate }}"
         (onClick)="handleCancel()"
         class="cancel-button"
       ></app-button>
       <app-button
-        text="Save"
+        text="{{ 'saveButton' | translate }}"
         (onClick)="handleSave()"
         class="save-button"
         [disabled]="courseForm.invalid"

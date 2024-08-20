@@ -1,0 +1,21 @@
+{
+  "durationLabel": "Duration:",
+  "creationDateLabel": "Creation Date:",
+  "copyrightFooter": "Copyright © Videocourses. All rights reserved",
+  "mainHeader": "Video Course",
+  "addButton": "Add Course",
+  "editButton": "Edit",
+  "deleteButton": "Delete",
+  "logoutButton": "Log Out",
+  "saveButton": "Save",
+  "cancelButton": "Cancel",
+  "loadMoreButton": "Load More",
+  "searchPlaceholder": "Search courses",
+  "languageLabel": "Language:",
+  "addCourseHeader": "Add New Course",
+  "editCourseLabel": "Edit Course",
+  "titleLabel": "Title:",
+  "descriptionLabel": "Description:",
+  "dateLabel": "Date:",
+  "authorsLabel": "Authors:"
+}

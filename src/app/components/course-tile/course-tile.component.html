@@ -23,9 +23,12 @@
       </svg>
     </h2>
     <div class="course-tile_info">
-      <p><strong>Duration:</strong> {{ course.length | duration }}</p>
       <p>
-        <strong>Creation Date:</strong>
+        <strong>{{ "durationLabel" | translate }}</strong>
+        {{ course.length | duration }}
+      </p>
+      <p>
+        <strong>{{ "creationDateLabel" | translate }}</strong>
         {{ course.date | date : "dd/MM/yyyy" }}
       </p>
     </div>
@@ -36,12 +39,12 @@
     </p>
     <div class="course-tile_buttons">
       <app-button
-        text="Edit"
+        text="{{ 'editButton' | translate }}"
         (onClick)="handleEdit()"
         class="course-tile_button"
       ></app-button>
       <app-button
-        text="Delete"
+        text="{{ 'deleteButton' | translate }}"
         (onClick)="handleDelete()"
         class="course-tile_button"
       ></app-button>

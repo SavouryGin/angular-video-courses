@@ -7,9 +7,18 @@ import { AppState } from '../../store/app.state';
 import { selectCurrentUser } from '../../store/auth/auth.selectors';
 import { User } from '../../models/user';
 import { of } from 'rxjs';
-import * as AuthActions from '../../store/auth/auth.actions';
 import { LogoComponent } from '../logo/logo.component';
 import { ButtonComponent } from '../button/button.component';
+import { Pipe, PipeTransform } from '@angular/core';
+import { LanguageSelectComponent } from '../language-select/language-select.component';
+import { TranslateService } from '@ngx-translate/core';
+
+@Pipe({ name: 'translate' })
+class MockTranslatePipe implements PipeTransform {
+  transform(value: any): any {
+    return value;
+  }
+}
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -17,6 +26,7 @@ describe('HeaderComponent', () => {
   let store: MockStore<AppState>;
   let authService: jasmine.SpyObj<AuthenticationService>;
   let tokenService: jasmine.SpyObj<TokenService>;
+  let translateService: jasmine.SpyObj<TranslateService>;
 
   const initialState = { auth: { user: null } };
   const mockUser: User = {
@@ -32,12 +42,24 @@ describe('HeaderComponent', () => {
       'getUserInfo',
       'logout',
     ]);
+    const translateSpy = jasmine.createSpyObj('TranslateService', [
+      'use',
+      'get',
+      'stream',
+    ]);
     const tokenServiceSpy = jasmine.createSpyObj('TokenService', ['getToken']);
 
     await TestBed.configureTestingModule({
-      declarations: [HeaderComponent, LogoComponent, ButtonComponent],
+      declarations: [
+        HeaderComponent,
+        LogoComponent,
+        ButtonComponent,
+        MockTranslatePipe,
+        LanguageSelectComponent,
+      ],
       providers: [
         provideMockStore({ initialState }),
+        { provide: TranslateService, useValue: translateSpy },
         { provide: AuthenticationService, useValue: authServiceSpy },
         { provide: TokenService, useValue: tokenServiceSpy },
       ],
