@@ -11,11 +11,7 @@ import { BreadcrumbsModule } from './features/breadcrumbs/breadcrumbs.module';
 import { SharedModule } from './shared/shared.module';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from './shared/strategies/custom-route-reuse-strategy';
-import {
-  HTTP_INTERCEPTORS,
-  HttpClient,
-  HttpClientModule,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './services/authentication/auth.interceptor';
 import { LoadingBlockComponent } from './components/loading-block/loading-block.component';
 import { StoreModule } from '@ngrx/store';
@@ -33,46 +29,40 @@ import {
 import { createTranslateLoader } from './services/translate-loader/translate-loader.service';
 import { LanguageSelectComponent } from './components/language-select/language-select.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    LogoComponent,
-    LoadingBlockComponent,
-    LanguageSelectComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BreadcrumbsModule,
-    SharedModule,
-    HttpClientModule,
-    StoreModule.forRoot(reducers),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25,
-      logOnly: environment.production,
-    }),
-    EffectsModule.forRoot([AuthEffects, CoursesEffects]),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient],
-      },
-    }),
-  ],
-  providers: [
-    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
-    TranslateService,
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        LogoComponent,
+        LoadingBlockComponent,
+        LanguageSelectComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BreadcrumbsModule,
+        SharedModule,
+        StoreModule.forRoot(reducers),
+        StoreDevtoolsModule.instrument({
+            maxAge: 25,
+            logOnly: environment.production,
+        }),
+        EffectsModule.forRoot([AuthEffects, CoursesEffects]),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: createTranslateLoader,
+                deps: [HttpClient],
+            },
+        })], providers: [
+        { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        },
+        TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}

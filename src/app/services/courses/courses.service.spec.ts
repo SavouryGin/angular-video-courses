@@ -1,14 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { CoursesService } from './courses.service';
 import { Store, StoreModule } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
 import { Course, CoursesResponse } from '../../models/course';
 import * as CoursesActions from '../../store/courses/courses.actions';
 import { AppState } from '../../store/app.state';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CoursesService', () => {
   let service: CoursesService;
@@ -53,9 +51,9 @@ describe('CoursesService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, StoreModule.forRoot({})],
-      providers: [CoursesService],
-    });
+    imports: [StoreModule.forRoot({})],
+    providers: [CoursesService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     service = TestBed.inject(CoursesService);
     httpMock = TestBed.inject(HttpTestingController);

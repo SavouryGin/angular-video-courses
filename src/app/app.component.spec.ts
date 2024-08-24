@@ -8,7 +8,8 @@ import { LanguageSelectComponent } from './components/language-select/language-s
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { provideMockStore } from '@ngrx/store/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @Pipe({ name: 'translate' })
 class MockTranslatePipe implements PipeTransform {
@@ -32,21 +33,23 @@ describe('AppComponent', () => {
     ]);
 
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [
+    declarations: [
         AppComponent,
         MockTranslatePipe,
         HeaderComponent,
         FooterComponent,
         LogoComponent,
         LanguageSelectComponent,
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [],
+    providers: [
         { provide: TranslateService, useValue: translateSpy },
         provideMockStore({}),
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
