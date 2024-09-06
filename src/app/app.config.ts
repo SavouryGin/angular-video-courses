@@ -23,12 +23,6 @@ import { reducers } from './store/reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/auth/auth.effects';
 import { CoursesEffects } from './store/courses/courses.effects';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-import { createTranslateLoader } from './services/translate-loader/translate-loader.service';
 import { CustomRouteReuseStrategy } from './shared/strategies/custom-route-reuse-strategy';
 import { AuthInterceptor } from './services/authentication/auth.interceptor';
 
