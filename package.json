@@ -1,10 +1,10 @@
 {
-  "name": "angular-gmp-2024",
-  "version": "0.0.0",
+  "name": "angular-video-courses",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "dev": "ng serve --port 4200",
-    "dev:ssr": "node dist/angular-gmp-2024/server/server.mjs",
+    "dev:ssr": "node dist/angular-video-courses/server/server.mjs",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

@@ -10,15 +10,15 @@ export class TokenService {
   constructor(@Inject(LOCAL_STORAGE) private localStorage: Storage) {}
 
   setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
+    this.localStorage?.setItem(this.tokenKey, token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return this.localStorage?.getItem(this.tokenKey) ?? null;
   }
 
   removeToken(): void {
-    localStorage.removeItem(this.tokenKey);
+    this.localStorage?.removeItem(this.tokenKey);
   }
 
   isAuthenticated(): boolean {

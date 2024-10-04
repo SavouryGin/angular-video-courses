@@ -43,6 +43,6 @@ describe('AppComponent', () => {
   it(`should have the 'angular-routing' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-gmp-2024');
+    expect(app.title).toEqual('angular-video-courses');
   });
 });

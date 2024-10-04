@@ -1,6 +1,6 @@
-# Angular Global Mentoring Program [2024 Q2-Q3]
+# Angular Video Courses
 
-This course is aimed to teach engineers how to build their own Angular application. During this course, participants will get familiar with the framework itself, testing framework, typescript, RxJs.
+This is an application that requests a list of video courses from the server, displays this list and allows editing courses. Basic CRUD operations, authentication and server side rendering are implemented.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.7.
 

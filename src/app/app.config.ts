@@ -14,6 +14,7 @@ import {
   HTTP_INTERCEPTORS,
   HttpClientModule,
   provideHttpClient,
+  withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
@@ -47,6 +48,6 @@ export const appConfig: ApplicationConfig = {
       useClass: AuthInterceptor,
       multi: true,
     },
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi(), withFetch()),
   ],
 };

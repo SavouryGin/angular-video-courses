@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-gmp-2024": {
+    "angular-video-courses": {
       "projectType": "application",
       "i18n": {
         "sourceLocale": "en",
@@ -31,7 +31,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/angular-gmp-2024",
+            "outputPath": "dist/angular-video-courses",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -49,11 +49,11 @@
           "configurations": {
             "de": {
               "localize": ["de"],
-              "outputPath": "dist/angular-gmp-2024"
+              "outputPath": "dist/angular-video-courses"
             },
             "ru": {
               "localize": ["ru"],
-              "outputPath": "dist/angular-gmp-2024"
+              "outputPath": "dist/angular-video-courses"
             },
             "production": {
               "budgets": [
@@ -82,10 +82,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-gmp-2024:build:production"
+              "buildTarget": "angular-video-courses:build:production"
             },
             "development": {
-              "buildTarget": "angular-gmp-2024:build:development"
+              "buildTarget": "angular-video-courses:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -93,7 +93,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "angular-gmp-2024:build"
+            "buildTarget": "angular-video-courses:build"
           }
         },
         "test": {

@@ -39,7 +39,7 @@ import { AuthInterceptor } from './services/authentication/auth.interceptor';
   ],
 })
 export class AppComponent {
-  title = 'angular-gmp-2024';
+  title = 'angular-video-courses';
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
