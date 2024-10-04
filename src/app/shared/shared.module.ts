@@ -7,7 +7,14 @@ import { FormNumericInputComponent } from '../components/form-numeric-input/form
 import { FormTextAreaComponent } from '../components/form-text-area/form-text-area.component';
 import { FormFieldComponent } from '../components/form-field/form-field.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HeaderComponent } from '../components/header/header.component';
+import { FooterComponent } from '../components/footer/footer.component';
+import { LogoComponent } from '../components/logo/logo.component';
+import { LoadingBlockComponent } from '../components/loading-block/loading-block.component';
+import { LanguageSelectComponent } from '../components/language-select/language-select.component';
+import { createTranslateLoader } from '../services/translate-loader/translate-loader.service';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,8 +24,23 @@ import { TranslateModule } from '@ngx-translate/core';
     FormDateInputComponent,
     FormNumericInputComponent,
     FormTextAreaComponent,
+    HeaderComponent,
+    FooterComponent,
+    LogoComponent,
+    LoadingBlockComponent,
+    LanguageSelectComponent,
   ],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient],
+      },
+    }),
+  ],
   exports: [
     ButtonComponent,
     FormFieldComponent,
@@ -27,6 +49,11 @@ import { TranslateModule } from '@ngx-translate/core';
     FormNumericInputComponent,
     FormTextAreaComponent,
     TranslateModule,
+    HeaderComponent,
+    FooterComponent,
+    LogoComponent,
+    LoadingBlockComponent,
+    LanguageSelectComponent,
   ],
 })
 export class SharedModule {}

@@ -14,8 +14,8 @@ import { Author, Course } from '../../../models/course';
 import { Router } from '@angular/router';
 import { AuthorsInputComponent } from '../authors-input/authors-input.component';
 import { coursesReducer } from '../../../store/courses/courses.reducer';
-import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { FormFieldComponent } from '../../../components/form-field/form-field.component';
 import { SharedModule } from '../../../shared/shared.module';
@@ -49,7 +49,7 @@ describe('CourseFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         CourseFormComponent,
         FormFieldComponent,
         FormTextInputComponent,
@@ -59,23 +59,22 @@ describe('CourseFormComponent', () => {
         AuthorsInputComponent,
         ButtonComponent,
         MockTranslatePipe,
-      ],
-      imports: [
-        RouterModule,
+    ],
+    imports: [RouterModule,
         SharedModule,
         ReactiveFormsModule,
-        StoreModule.forRoot({ courses: coursesReducer }),
-        HttpClientTestingModule,
-      ],
-      providers: [
+        StoreModule.forRoot({ courses: coursesReducer })],
+    providers: [
         {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: { paramMap: { get: () => '1' } },
-          },
+            provide: ActivatedRoute,
+            useValue: {
+                snapshot: { paramMap: { get: () => '1' } },
+            },
         },
-      ],
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
   });
 
   beforeEach(() => {
